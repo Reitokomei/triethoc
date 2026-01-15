@@ -62,6 +62,29 @@
             .sidebar { display: none; } /* Giấu sidebar trên mobile cho gọn */
             .hero-title { font-size: 2rem; }
         }
+        /* CSS cho nút Home trong Sidebar */
+        .home-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #fff1f2; /* Màu hồng nhạt hợp tone */
+            border: 2px dashed var(--primary); /* Viền đứt nét nhìn cho nghệ */
+            color: var(--primary);
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .home-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-style: solid; /* Rê chuột vào thì viền liền lại */
+        }
     </style>
 </head>
 <body>
@@ -76,7 +99,7 @@
         <div style="padding: 20px; font-weight: bold; color: var(--primary); border-bottom: 1px solid var(--border);">Danh sách câu hỏi</div>
         <div class="sidebar-content">
             <div class="question-map" id="question-map"></div>
-            <button class="home-btn" onclick="returnToMenu()" title="Về màn hình chính">🏠</button>
+        <button class="home-btn" onclick="window.location.href='index.html'" title="Về màn hình chính">🏠</button>       
         </div>
     </nav>
 
