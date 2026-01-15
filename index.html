@@ -47,16 +47,27 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
+    body {
             font-family: 'Be Vietnam Pro', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            height: 100vh;
+            color: white;
+            margin: 0;
+            min-height: 100vh;
             display: flex;
-            overflow: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            justify-content: center;
+            align-items: center;
+            
+            /* --- PHẦN NỀN ĐỘNG --- */
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #4c0519);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite; /* Chuyển màu trong 15s */
         }
 
+        /* Định nghĩa cách màu di chuyển */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         /* --- LANDING PAGE --- */
         #landing-page {
             position: fixed;
@@ -275,6 +286,49 @@
             justify-content: center;
             align-items: flex-start;
         }
+        /* --- HIỆU ỨNG BAY BỔNG --- */
+        .mode-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Chuyển động nảy nảy như thạch */
+        }
+
+        .mode-card:hover {
+            transform: translateY(-10px) scale(1.02); /* Bay lên 10px và to ra xíu */
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4); /* Đổ bóng sâu hơn tạo 3D */
+            border-color: #fbbf24; /* Viền sáng rực lên */
+            cursor: pointer;
+        }
+
+        /* Hiệu ứng riêng cho nút Tư tưởng (Màu đỏ) */
+        .subject-group:last-child .mode-card:hover {
+            border-color: #ef4444; /* Viền đỏ */
+            box-shadow: 0 20px 40px -5px rgba(239, 68, 68, 0.3); /* Bóng đỏ */
+        }
+        /* --- HIỆU ỨNG TRỒI LÊN (SMOOTH ENTRANCE) --- */
+        
+        /* 1. Định nghĩa chuyển động: Từ mờ + thấp -> Rõ + cao */
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px); /* Bắt đầu ở vị trí thấp hơn 30px */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0); /* Về vị trí chuẩn */
+            }
+        }
+
+        /* 2. Áp dụng cho màn hình chọn môn */
+        #selection-view.active .subject-group {
+            animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0; /* Mặc định ẩn để chờ animation chạy */
+        }
+
+        /* 3. Làm cho cột bên phải (Tư tưởng) hiện trễ hơn cột trái 1 xíu (0.2 giây) */
+        /* Nhìn nó sẽ có lớp lang, chuyên nghiệp hơn */
+        #selection-view.active .subject-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
     </style>
 </head>
 <body>
@@ -285,7 +339,7 @@
         <div class="shape shape-3"></div>
         
         <div class="landing-content">
-            <h1 class="hero-title">Ôn tập đại cương -  </h1>
+            <h1 class="hero-title">ÔN TẬP ĐẠI CƯƠNG</h1>
             
             <div id="intro-view">
                 <button class="start-btn" onclick="showSelection()">
@@ -673,6 +727,7 @@
 </body>
 
 </html>
+
 
 
 
