@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn thi Tư tưởng Hồ Chí Minh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Tui đổi tông màu sang Đỏ - Vàng cho đúng chất Tư tưởng nhé */
+        :root {
+            --primary: #d32f2f; /* Đỏ cách mạng */
+            --primary-hover: #b71c1c;
+            --secondary: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-body: #fff1f2; /* Hồng phấn nhẹ */
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-sec: #6b7280;
+            --border: #fecdd3;
+            --sidebar-width: 320px;
+        }
+
+        /* --- GIỮ NGUYÊN CSS CŨ ĐỂ KHÔNG BỊ LỖI GIAO DIỆN --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+        
+        /* Landing Page */
+        #landing-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #881337 0%, #4c0519 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: transform 0.5s ease; }
+        #landing-page.hidden { transform: translateY(-100%); }
+        .hero-title { font-size: 3rem; font-weight: 800; margin-bottom: 2rem; text-align: center; text-transform: uppercase; color: #fbbf24; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .start-btn { padding: 15px 40px; font-size: 1.2rem; font-weight: 700; color: #881337; background: #fbbf24; border: none; border-radius: 50px; cursor: pointer; transition: transform 0.2s; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .start-btn:hover { transform: scale(1.05); }
+        .back-link { margin-top: 20px; color: #fecdd3; text-decoration: none; font-size: 0.9rem; cursor: pointer; }
+        .back-link:hover { text-decoration: underline; color: white; }
+
+        /* Main App */
+        .sidebar { width: var(--sidebar-width); background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+        .sidebar-content { flex: 1; overflow-y: auto; padding: 15px; }
+        .question-map { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .map-item { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: #f3f4f6; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
+        .map-item.active { background: var(--primary); color: white; }
+        .map-item.correct { background: var(--success); color: white; }
+        .map-item.wrong { background: var(--danger); color: white; }
+
+        .main-content { flex: 1; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
+        .quiz-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto; width: 100%; }
+        .option-item { background: #fff1f2; padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .option-item:hover:not(.disabled) { border-color: var(--primary); background: #ffe4e6; }
+        .option-item.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+        .option-item.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .disabled { pointer-events: none; }
+        
+        .explanation { margin-top: 20px; padding: 15px; background: #fffbeb; border-radius: 10px; color: #92400e; display: none; }
+        .controls { margin-top: 30px; display: flex; justify-content: space-between; }
+        .btn { padding: 10px 25px; border-radius: 50px; border: none; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: var(--primary); color: white; }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sidebar { display: none; } /* Giấu sidebar trên mobile cho gọn */
+            .hero-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="landing-page">
+        <h1 class="hero-title">TƯ TƯỞNG<br>HỒ CHÍ MINH</h1>
+        <button class="start-btn" onclick="startQuiz()">BẮT ĐẦU LÀM BÀI 🇻🇳</button>
+        <a href="index.html" class="back-link">← Quay lại chọn môn khác</a>
+    </div>
+
+    <nav class="sidebar">
+        <div style="padding: 20px; font-weight: bold; color: var(--primary); border-bottom: 1px solid var(--border);">Danh sách câu hỏi</div>
+        <div class="sidebar-content">
+            <div class="question-map" id="question-map"></div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="quiz-card">
+            <h3 id="q-number" style="color: var(--secondary); margin-bottom: 10px;">CÂU 1</h3>
+            <h2 id="q-text" style="margin-bottom: 25px;">Nội dung câu hỏi...</h2>
+            <div id="options-container"></div>
+            
+            <div class="explanation" id="explanation"></div>
+
+            <div class="controls">
+                <button class="btn" onclick="prevQ()">← Câu trước</button>
+                <div id="score-text" style="align-self: center; font-weight: bold;">Đúng: 0</div>
+                <button class="btn btn-primary" onclick="nextQ()">Câu sau →</button>
+            </div>
+        </div>
+    </main>
+
+<script>
+    // --- KHO DỮ LIỆU TƯ TƯỞNG HỒ CHÍ MINH (MẪU) ---
+    // Bro copy thêm câu hỏi vào trong cái ngoặc vuông [] này nhé
+    const quizData = [
+        {
+            "q": "Cốt lõi của tư tưởng Hồ Chí Minh là gì?",
+            "a": "Độc lập dân tộc gắn liền với chủ nghĩa xã hội",
+            "e": "Đáp án: Độc lập dân tộc gắn liền với chủ nghĩa xã hội. Đây là sợi chỉ đỏ xuyên suốt trong tư tưởng của Người."
+        },
+        {
+            "q": "Nguyễn Ái Quốc đọc bản 'Sơ thảo lần thứ nhất những luận cương về vấn đề dân tộc và vấn đề thuộc địa' của Lênin vào thời gian nào?",
+            "a": "Tháng 7 năm 1920",
+            "e": "Đáp án: Tháng 7/1920, qua báo L'Humanité (Nhân đạo)."
+        },
+        {
+            "q": "Theo Hồ Chí Minh, ưu điểm lớn nhất của học thuyết Khổng Tử là gì?",
+            "a": "Sự tu dưỡng đạo đức cá nhân",
+            "e": "Đáp án: Sự tu dưỡng đạo đức cá nhân."
+        },
+        {
+            "q": "Hồ Chí Minh xác định yếu tố nào là gốc của người cách mạng?",
+            "a": "Đạo đức cách mạng",
+            "e": "Đáp án: Đạo đức cách mạng (Cũng như sông thì có nguồn mới có nước, không có nguồn thì sông cạn...)"
+        },
+        {
+            "q": "Tư tưởng Hồ Chí Minh được hình thành từ những nguồn gốc nào?",
+            "a": "Truyền thống dân tộc, Tinh hoa văn hóa nhân loại, Chủ nghĩa Mác-Lênin",
+            "e": "Đáp án: Cả 3 yếu tố: Truyền thống dân tộc, Tinh hoa nhân loại và Chủ nghĩa Mác-Lênin (quan trọng nhất)."
+        }
+    ];
+
+    // --- LOGIC XỬ LÝ (GIỮ NGUYÊN KHÔNG CẦN SỬA) ---
+    let currentIdx = 0;
+    let score = 0;
+    let userAnswers = new Array(quizData.length).fill(null); // Lưu đáp án người dùng
+
+    // Trộn đáp án để không bị nhớ vị trí A,B,C,D
+    function shuffleArray(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+    
+    // Tạo đáp án sai giả (lấy từ câu khác đắp vào cho đủ 4 lựa chọn)
+    function generateOptions(correctAnswer) {
+        let allAnswers = quizData.map(q => q.a);
+        let wrongs = [];
+        while(wrongs.length < 3) {
+            let rand = allAnswers[Math.floor(Math.random() * allAnswers.length)];
+            if(rand !== correctAnswer && !wrongs.includes(rand)) wrongs.push(rand);
+        }
+        return shuffleArray([correctAnswer, ...wrongs]);
+    }
+
+    // Chuẩn bị dữ liệu
+    quizData.forEach(item => {
+        item.options = generateOptions(item.a);
+    });
+
+    function startQuiz() {
+        document.getElementById('landing-page').classList.add('hidden');
+        renderSidebar();
+        loadQuestion(0);
+    }
+
+    function renderSidebar() {
+        const map = document.getElementById('question-map');
+        map.innerHTML = '';
+        quizData.forEach((_, idx) => {
+            let div = document.createElement('div');
+            div.className = 'map-item';
+            div.textContent = idx + 1;
+            div.id = `map-${idx}`;
+            div.onclick = () => loadQuestion(idx);
+            map.appendChild(div);
+        });
+    }
+
+    function loadQuestion(idx) {
+        currentIdx = idx;
+        const q = quizData[idx];
+        document.getElementById('q-number').textContent = `CÂU ${idx + 1}/${quizData.length}`;
+        document.getElementById('q-text').textContent = q.q;
+        document.getElementById('explanation').style.display = 'none';
+
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+
+        q.options.forEach(opt => {
+            let btn = document.createElement('div');
+            btn.className = 'option-item';
+            btn.textContent = opt;
+            
+            // Nếu câu này đã làm rồi thì hiện lại trạng thái
+            if (userAnswers[idx]) {
+                btn.classList.add('disabled');
+                if (opt === q.a) btn.classList.add('correct');
+                else if (opt === userAnswers[idx] && opt !== q.a) btn.classList.add('wrong');
+                
+                if (userAnswers[idx]) {
+                    document.getElementById('explanation').textContent = q.e;
+                    document.getElementById('explanation').style.display = 'block';
+                }
+            } else {
+                btn.onclick = () => checkAnswer(opt, q.a, idx);
+            }
+            container.appendChild(btn);
+        });
+
+        updateSidebar();
+    }
+
+    function checkAnswer(selected, correct, idx) {
+        userAnswers[idx] = selected;
+        if (selected === correct) score++;
+        
+        document.getElementById('score-text').textContent = `Đúng: ${score}`;
+        loadQuestion(idx); // Load lại để hiện màu xanh đỏ
+    }
+
+    function updateSidebar() {
+        quizData.forEach((q, i) => {
+            let item = document.getElementById(`map-${i}`);
+            item.className = 'map-item';
+            if (i === currentIdx) item.classList.add('active');
+            if (userAnswers[i]) {
+                item.classList.add(userAnswers[i] === q.a ? 'correct' : 'wrong');
+            }
+        });
+    }
+
+    function nextQ() { if (currentIdx < quizData.length - 1) loadQuestion(currentIdx + 1); }
+    function prevQ() { if (currentIdx > 0) loadQuestion(currentIdx - 1); }
+
+</script>
+</body>
+</html>
