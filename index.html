@@ -277,10 +277,27 @@
             .question-text { font-size: 1.1rem; }
             
             /* Ẩn nút Home trên thanh topbar (vì chật chỗ) */
-            .top-bar .btn-secondary { display: none; }
+            .top-bar {
+            /* --- CÁC DÒNG CŨ GIỮ NGUYÊN --- */
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card); /* Hoặc sửa thành rgba(30, 41, 59, 0.9) nếu muốn mờ ảo */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            
+            /* --- THÊM 3 DÒNG NÀY ĐỂ NÓ DÍNH --- */
+            position: sticky;  /* Kích hoạt chế độ dính */
+            top: 0;            /* Dính ngay đỉnh (cách đỉnh 0px) */
+            z-index: 900;      /* Luôn nổi lên trên nội dung câu hỏi */
+        
         }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* Màu nền hơi trong suốt + Hiệu ứng làm mờ */
+            background: rgba(30, 41, 59, 0.85); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
     </style>
 </head>
 <body>
@@ -701,4 +718,5 @@
 </script>
 </body>
 </html>
+
 
