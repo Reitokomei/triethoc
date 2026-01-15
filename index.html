@@ -277,8 +277,8 @@
             .question-text { font-size: 1.1rem; }
             
             /* Ẩn nút Home trên thanh topbar (vì chật chỗ) */
-            .top-bar {
-            /* --- CẤU TRÚC CƠ BẢN --- */
+         .top-bar {
+            /* --- CÁC DÒNG CŨ --- */
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
@@ -288,16 +288,17 @@
             /* --- PHẦN BÁM DÍNH (STICKY) --- */
             position: sticky;
             top: 0;
-            z-index: 900;
+            z-index: 900; /* Lớp này thấp hơn Sidebar (1000) là đúng rồi */
 
             /* --- MÀU NỀN & HIỆU ỨNG KÍNH MỜ (SỬA LẠI CHỖ NÀY) --- */
-            /* Dùng rgba để có độ trong suốt (0.85), đừng dùng var(--bg-card) nữa vì nó là màu đặc */
+            /* Dùng rgba để có độ trong suốt (0.85), đừng dùng var(--bg-card) nữa */
             background: rgba(30, 41, 59, 0.85); 
             
             /* Hiệu ứng làm mờ nội dung bên dưới khi trượt qua */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-        }
+        
+        } /* <--- DẤU ĐÓNG NGOẶC PHẢI NẰM Ở TẬN ĐÂY MỚI ĐÚNG */
     </style>
 </head>
 <body>
@@ -718,6 +719,7 @@
 </script>
 </body>
 </html>
+
 
 
 
