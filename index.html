@@ -21,7 +21,7 @@
             --border: #e5e7eb;
             --opt-hover: #f9fafb;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --sidebar-width: 300px; /* Thu gọn sidebar chút cho đẹp */
+            --sidebar-width: 300px;
             --exp-bg: #fff7ed;
             --exp-text: #9a3412;
         }
@@ -49,12 +49,10 @@
 
         body {
             font-family: 'Be Vietnam Pro', sans-serif;
-            color: var(--text-main); /* Sửa màu chữ mặc định */
+            color: var(--text-main);
             margin: 0;
-            height: 100vh; /* Cố định chiều cao màn hình */
-            overflow: hidden; /* Không cho cuộn body, chỉ cuộn nội dung con */
-            
-            /* --- PHẦN NỀN ĐỘNG --- */
+            height: 100vh;
+            overflow: hidden;
             background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #4c0519);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -66,13 +64,13 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- CONTAINER CHO APP LÀM BÀI (QUAN TRỌNG) --- */
+        /* --- CONTAINER APP --- */
         #quiz-app-container {
-            display: none; /* Mặc định ẩn */
+            display: none;
             width: 100%;
             height: 100%;
-            flex-direction: row; /* Sidebar trái, Content phải */
-            background: var(--bg-body); /* Nền riêng cho lúc làm bài */
+            flex-direction: row;
+            background: var(--bg-body);
             opacity: 0;
             transition: opacity 0.5s ease;
         }
@@ -85,7 +83,6 @@
         #landing-page {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            /* background: trong suốt để thấy nền động của body */
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -93,7 +90,7 @@
             justify-content: center;
             color: white;
             transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease;
-            overflow-y: auto; /* Cho phép cuộn nếu màn hình nhỏ */
+            overflow-y: auto;
         }
 
         #landing-page.hidden {
@@ -139,7 +136,6 @@
         }
         .start-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 20px 35px -5px rgba(79, 70, 229, 0.6); }
 
-        /* --- SELECTION MENU (2 CỘT) --- */
         #selection-view {
             display: none;
             opacity: 0;
@@ -165,13 +161,11 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            width: 340px; /* Cố định chiều rộng cho đều */
+            width: 340px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0,0,0,0.2);
             animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
-        
-        #selection-view.active .subject-group:nth-child(2) { animation-delay: 0.2s; }
 
         .subject-title {
             font-size: 1.1rem;
@@ -203,9 +197,6 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
         
-        /* Style riêng cho cột Tư tưởng */
-        .subject-group:last-child .mode-card:hover { border-color: #ef4444; }
-
         .mode-icon { font-size: 2.5rem; margin-bottom: 15px; display: block; }
         .mode-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; color: white; }
         .mode-desc { color: #cbd5e1; font-size: 0.9rem; line-height: 1.4; }
@@ -219,8 +210,7 @@
         @keyframes slideUpFade { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes float { 0% { transform: translate(0, 0) rotate(0deg); } 100% { transform: translate(30px, 50px) rotate(10deg); } }
 
-        /* --- QUIZ APP LAYOUT --- */
-/* --- SIDEBAR CHUẨN (LAPTOP) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--bg-sidebar);
@@ -228,77 +218,168 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            z-index: 1000; /* Luôn nằm trên cùng */
-            transition: transform 0.3s ease; /* Hiệu ứng trượt mượt */
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            position: relative;
         }
 
-        /* Màn đen che nền (Mặc định ẩn) */
-        .mobile-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5); /* Màu đen mờ 50% */
-            z-index: 999; /* Nằm dưới sidebar nhưng trên nội dung */
-            backdrop-filter: blur(2px); /* Làm mờ nền cho đẹp */
-            opacity: 0;
-            transition: opacity 0.3s;
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sidebar-title { font-weight: 800; font-size: 1.1rem; color: var(--primary); }
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--text-main); cursor: pointer; }
+
+        .sidebar-content { flex: 1; overflow-y: auto; padding: 15px; }
+        
+        /* Map câu hỏi (Grid) */
+        .question-map {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .map-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: var(--bg-card);
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+        .map-item:hover { background: var(--opt-hover); border-color: var(--primary); }
+        .map-item.active { border-color: var(--primary); border-width: 2px; font-weight: 700; transform: scale(1.1); }
+        .map-item.correct { background: var(--success); color: white; border-color: var(--success); }
+        .map-item.wrong { background: var(--danger); color: white; border-color: var(--danger); }
+
+        .home-btn-sidebar {
+            width: 100%; padding: 10px; margin-bottom: 10px;
+            background: var(--opt-hover); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text-main); font-weight: 600; cursor: pointer;
         }
 
-        /* --- RESPONSIVE MOBILE (GIAO DIỆN ĐIỆN THOẠI) --- */
-        @media (max-width: 768px) {
-            /* 1. Sidebar biến thành ngăn kéo trượt */
-            .sidebar {
-                position: fixed; /* Nổi lên trên */
-                top: 0; 
-                left: 0;
-                height: 100%;
-                width: 280px; /* Chiều rộng vừa phải trên đt */
-                box-shadow: 5px 0 15px rgba(0,0,0,0.2);
-                transform: translateX(-100%); /* Mặc định giấu sang trái 100% */
-            }
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg-body);
+            position: relative;
+        }
 
-            /* Khi có class .open thì trượt ra */
-            .sidebar.open {
-                transform: translateX(0); /* Trượt về vị trí 0 (hiện ra) */
-            }
-
-            /* 2. Hiển thị màn đen khi mở menu */
-            .mobile-overlay.active {
-                display: block;
-                opacity: 1;
-            }
-
-            /* 3. Nút menu toggle hiện ra */
-            .menu-toggle { display: block; }
-
-            /* 4. Tối ưu lại font chữ cho điện thoại đỡ to */
-            .hero-title { font-size: 2rem; }
-            .quiz-card { padding: 20px; }
-            .question-text { font-size: 1.1rem; }
-            
-            /* Ẩn nút Home trên thanh topbar (vì chật chỗ) */
-         .top-bar {
-            /* --- CÁC DÒNG CŨ --- */
+        .top-bar {
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            
-            /* --- PHẦN BÁM DÍNH (STICKY) --- */
             position: sticky;
             top: 0;
-            z-index: 900; /* Lớp này thấp hơn Sidebar (1000) là đúng rồi */
-
-            /* --- MÀU NỀN & HIỆU ỨNG KÍNH MỜ (SỬA LẠI CHỖ NÀY) --- */
-            /* Dùng rgba để có độ trong suốt (0.85), đừng dùng var(--bg-card) nữa */
-            background: rgba(30, 41, 59, 0.85); 
-            
-            /* Hiệu ứng làm mờ nội dung bên dưới khi trượt qua */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            z-index: 900;
+            background: rgba(30, 41, 59, 0.85); /* Default dark mode bg ish */
+        }
+        [data-theme="light"] .top-bar { background: rgba(255, 255, 255, 0.85); }
         
-        } /* <--- DẤU ĐÓNG NGOẶC PHẢI NẰM Ở TẬN ĐÂY MỚI ĐÚNG */
+        .top-bar { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+
+        .progress-wrapper { flex: 1; max-width: 500px; margin: 0 20px; }
+        .progress-bg { height: 8px; background: rgba(128,128,128,0.2); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
+
+        /* Toggle Dark Mode */
+        .theme-toggle-wrapper { display: flex; align-items: center; }
+        .toggle-slot { position: relative; height: 26px; width: 50px; border: 1px solid var(--border); border-radius: 100px; background-color: var(--bg-card); cursor: pointer; }
+        .toggle-checkbox { opacity: 0; width: 0; height: 0; }
+        .toggle-button { background-color: var(--primary); position: absolute; top: 2px; left: 3px; width: 20px; height: 20px; border-radius: 50%; transition: transform 0.3s; display: flex; align-items: center; justify-content: center; color: white; }
+        .toggle-checkbox:checked ~ .toggle-button { transform: translateX(24px); }
+        .sun-icon, .moon-icon { width: 14px; height: 14px; }
+        .moon-icon { display: none; }
+        .toggle-checkbox:checked ~ .toggle-button .sun-icon { display: none; }
+        .toggle-checkbox:checked ~ .toggle-button .moon-icon { display: block; }
+
+        /* Quiz Area */
+        .quiz-area { padding: 30px 20px; display: flex; justify-content: center; }
+        .quiz-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .question-number { font-size: 0.9rem; font-weight: 700; color: var(--text-sec); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .question-text { font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; line-height: 1.5; }
+
+        .option-item {
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.05rem;
+        }
+        .option-item:hover:not(.disabled) { border-color: var(--primary); background: var(--opt-hover); }
+        .option-item.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.1); color: var(--success); font-weight: 600; }
+        .option-item.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .option-item.disabled { cursor: default; }
+
+        /* Explanation */
+        .explanation { display: none; margin-top: 25px; padding: 20px; border-radius: 12px; background: var(--exp-bg); border-left: 4px solid var(--warning); animation: slideUpFade 0.4s ease; }
+        .exp-header { font-weight: 700; color: var(--exp-text); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .exp-content { color: var(--exp-text); font-size: 0.95rem; line-height: 1.5; }
+
+        .footer-controls { margin-top: 40px; display: flex; justify-content: space-between; }
+        .btn { padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; display: flex; align-items: center; gap: 8px; font-size: 1rem; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .btn-primary:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-secondary:hover { background: var(--opt-hover); }
+        .btn-warning { background: var(--warning); color: white; }
+
+        /* Result Overlay */
+        .result-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 2000;
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        .result-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+        .result-box { background: var(--bg-card); padding: 40px; border-radius: 24px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .score-big { font-size: 4rem; font-weight: 800; color: var(--primary); margin: 10px 0; }
+
+        /* MOBILE RESPONSIVE */
+        .mobile-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 999; backdrop-filter: blur(2px);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .mobile-overlay.active { display: block; opacity: 1; }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed; top: 0; left: 0; height: 100%; width: 280px;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.2); transform: translateX(-100%);
+            }
+            .sidebar.open { transform: translateX(0); }
+            .menu-toggle { display: block; }
+            .hero-title { font-size: 2rem; }
+            .quiz-card { padding: 20px; }
+            .question-text { font-size: 1.1rem; }
+            .progress-wrapper { display: none; } /* Ẩn thanh tiến trình trên mobile cho đỡ chật */
+        }
     </style>
 </head>
 <body>
@@ -348,13 +429,9 @@
     </div>
 
     <div id="quiz-app-container">
-        <div id="quiz-app-container">
         
         <div class="mobile-overlay" id="mobile-overlay" onclick="toggleSidebar()"></div>
 
-        <nav class="sidebar" id="sidebar">
-            ... (nội dung cũ giữ nguyên) ...
-        </nav>
         <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-title">Danh sách câu hỏi</div>
@@ -372,7 +449,7 @@
                 <div style="display: flex; justify-content: space-around; margin-bottom:10px">
                     <span style="color:var(--success)">● Đúng</span>
                     <span style="color:var(--danger)">● Sai</span>
-                    <span style="color:var(--text-sec)">● Chưa làm</span>
+                    <span style="color:var(--text-sec)">○ Chưa làm</span>
                 </div>
                 <button class="btn btn-secondary" style="width:100%; justify-content:center" onclick="restartQuiz()">
                     ↺ Làm lại đề này
@@ -437,7 +514,7 @@
             
             <div style="display:flex; flex-direction:column; gap:12px; align-items:center">
                 <button class="btn btn-warning" id="btn-review-wrong" onclick="reviewWrongAnswers()" style="display:none; width: 100%; justify-content: center;">
-                      🔍 Ôn lại các câu sai
+                       🔍 Ôn lại các câu sai
                 </button>
 
                 <div style="display:flex; gap:15px; width: 100%; justify-content: center;">
@@ -482,6 +559,21 @@
         return wrongs;
     }
 
+    // --- RENDER SIDEBAR (BỊ THIẾU TRONG CODE CŨ CỦA ÔNG) ---
+    function renderSidebar() {
+        const mapContainer = document.getElementById('question-map');
+        mapContainer.innerHTML = '';
+        
+        quizData.forEach((item, index) => {
+            const btn = document.createElement('div');
+            btn.id = `map-item-${index}`;
+            btn.className = 'map-item';
+            btn.textContent = index + 1;
+            btn.onclick = () => jumpToQuestion(index);
+            mapContainer.appendChild(btn);
+        });
+    }
+
     function initQuiz(selectedData) {
         const shuffledRaw = shuffleArray([...selectedData]);
         const allAnswers = fullData.map(item => item.a);
@@ -498,14 +590,17 @@
 
         currentQIndex = 0;
         score = 0;
-        updateStats();
+        
+        // Gọi hàm render Sidebar mới thêm
         renderSidebar();
+        
+        updateStats();
         loadQuestion(0);
         document.getElementById('result-overlay').classList.remove('active');
         document.getElementById('sidebar').classList.remove('open');
     }
 
-    // --- LANDING PAGE LOGIC (SỬA LẠI ĐỂ HIỆN APP) ---
+    // --- LANDING PAGE LOGIC ---
     function showSelection() {
         document.getElementById('intro-view').classList.add('fade-out');
         setTimeout(() => {
@@ -546,34 +641,22 @@
         }));
 
         isReviewMode = true;
-        closeResult(); // Đóng bảng kết quả
-        initQuiz(rawWrongData); // Load lại quiz với câu sai
+        closeResult(); 
+        initQuiz(rawWrongData);
     }
 
     // --- UI FUNCTIONS ---
     function toggleSidebar() {
-        // Bật/tắt class 'open' cho sidebar
         document.getElementById('sidebar').classList.toggle('open');
-        
-        // Bật/tắt class 'active' cho màn đen
         const overlay = document.getElementById('mobile-overlay');
         if (overlay) {
             overlay.classList.toggle('active');
         }
     }
 
-    // Thêm cái này: Khi chọn câu hỏi trong sidebar xong thì tự đóng sidebar lại (cho đỡ vướng)
-    function jumpToQuestion(index) {
-        // ... (code cũ giữ nguyên) ...
-        
-        // Thêm đoạn này vào cuối hàm jumpToQuestion:
-        if(window.innerWidth <= 768) {
-            toggleSidebar(); // Tự động đóng menu trên mobile
-        }
-    }
-
     function updateSidebarStatus(index) {
         const item = document.getElementById(`map-item-${index}`);
+        if (!item) return; // Safety check
         const data = quizData[index];
         item.classList.remove('active', 'correct', 'wrong');
         if (index === currentQIndex) item.classList.add('active');
@@ -592,7 +675,12 @@
         if(oldItem) oldItem.classList.remove('active');
         currentQIndex = index;
         loadQuestion(index);
-        if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+        
+        // Auto close sidebar on mobile
+        if(window.innerWidth <= 768) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('mobile-overlay').classList.remove('active');
+        }
     }
 
     function loadQuestion(index) {
@@ -632,7 +720,6 @@
         const nextBtn = document.getElementById('btn-next');
         nextBtn.textContent = (index === quizData.length - 1) ? 'Hoàn thành 🏁' : 'Câu sau →';
         
-        // Scroll lên đầu thẻ main khi đổi câu
         document.querySelector('.main-content').scrollTop = 0;
     }
 
@@ -697,7 +784,7 @@
     }
 
     function returnToMenu() {
-        location.reload(); // Cách nhanh nhất để reset về menu
+        location.reload();
     }
 
     // --- THEME ---
@@ -719,8 +806,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
