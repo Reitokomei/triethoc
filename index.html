@@ -278,26 +278,26 @@
             
             /* Ẩn nút Home trên thanh topbar (vì chật chỗ) */
             .top-bar {
-            /* --- CÁC DÒNG CŨ GIỮ NGUYÊN --- */
+            /* --- CẤU TRÚC CƠ BẢN --- */
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--bg-card); /* Hoặc sửa thành rgba(30, 41, 59, 0.9) nếu muốn mờ ảo */
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             
-            /* --- THÊM 3 DÒNG NÀY ĐỂ NÓ DÍNH --- */
-            position: sticky;  /* Kích hoạt chế độ dính */
-            top: 0;            /* Dính ngay đỉnh (cách đỉnh 0px) */
-            z-index: 900;      /* Luôn nổi lên trên nội dung câu hỏi */
-            }
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        /* Màu nền hơi trong suốt + Hiệu ứng làm mờ */
+            /* --- PHẦN BÁM DÍNH (STICKY) --- */
+            position: sticky;
+            top: 0;
+            z-index: 900;
+
+            /* --- MÀU NỀN & HIỆU ỨNG KÍNH MỜ (SỬA LẠI CHỖ NÀY) --- */
+            /* Dùng rgba để có độ trong suốt (0.85), đừng dùng var(--bg-card) nữa vì nó là màu đặc */
             background: rgba(30, 41, 59, 0.85); 
+            
+            /* Hiệu ứng làm mờ nội dung bên dưới khi trượt qua */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+        }
     </style>
 </head>
 <body>
@@ -718,6 +718,7 @@
 </script>
 </body>
 </html>
+
 
 
 
