@@ -294,22 +294,32 @@
             </div>
 
             <div id="selection-view">
-                <div class="mode-card" onclick="startQuizMode('chapter1')">
-                    <span class="mode-icon">📖</span>
-                    <div class="mode-title">Chương 1</div>
-                    <div class="mode-desc">Khái luận & Vấn đề cơ bản<br>(31 câu hỏi chuẩn)</div>
+                <div class="subject-group">
+                    <div class="subject-title">📘 Triết học Mác - Lênin</div>
+                    
+                    <div class="mode-card" onclick="startQuizMode('chapter1')">
+                        <span class="mode-icon">📖</span>
+                        <div class="mode-title">Chương 1</div>
+                        <div class="mode-desc">Khái luận & Vấn đề cơ bản<br>(31 câu hỏi)</div>
+                    </div>
+
+                    <div class="mode-card" onclick="startQuizMode('full')">
+                        <span class="mode-icon">🔥</span>
+                        <div class="mode-title">Full 182 Câu</div>
+                        <div class="mode-desc">Ngân hàng đề thi<br>(Thử thách)</div>
+                    </div>
                 </div>
-                
-                <div class="mode-card" onclick="startQuizMode('full')">
-                    <span class="mode-icon">🔥</span>
-                    <div class="mode-title">Full 182 Câu</div>
-                    <div class="mode-desc">Thử thách toàn bộ kiến thức<br>(Ngân hàng đề)</div>
-                </div> 
-                <div class="mode-card" onclick="window.location.href='tutuong.html'" style="border-color: #ef4444;">
-                    <span class="mode-icon">🇻🇳</span>
-                    <div class="mode-title">Tư Tưởng HCM</div>
-                    <div class="mode-desc">Ôn tập trắc nghiệm<br>(Bấm để chuyển môn)</div>
-                </div>
+
+                <div class="subject-group" style="border-color: rgba(239, 68, 68, 0.3);">
+                    <div class="subject-title" style="color: #f87171;">🇻🇳 Tư tưởng Hồ Chí Minh</div>
+
+                    <div class="mode-card" onclick="window.location.href='tutuong.html'" style="border-color: #ef4444;">
+                        <span class="mode-icon">⭐</span>
+                        <div class="mode-title">Ôn tập trắc nghiệm</div>
+                        <div class="mode-desc">Câu hỏi ôn tập<br>(Chuyển sang phòng Tư Tưởng)</div>
+                    </div>
+
+            </div>
             </div>
 
         </div>
@@ -663,5 +673,6 @@
 </body>
 
 </html>
+
 
 
