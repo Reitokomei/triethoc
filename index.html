@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luyện thi Triết học - Ôn tập hiệu quả</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+            --text-main: #1f2937;
+            --text-sec: #6b7280;
+            --border: #e5e7eb;
+            --opt-hover: #f9fafb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --sidebar-width: 320px;
+            --exp-bg: #fff7ed; /* Màu nền giải thích */
+            --exp-text: #9a3412;
+        }
+
+        [data-theme="dark"] {
+            --primary: #6366f1;
+            --primary-hover: #818cf8;
+            --secondary: #94a3b8;
+            --success: #34d399;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-sidebar: #1e293b;
+            --text-main: #f1f5f9;
+            --text-sec: #94a3b8;
+            --border: #334155;
+            --opt-hover: #334155;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --exp-bg: #431407;
+            --exp-text: #fdba74;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- LANDING PAGE --- */
+        #landing-page {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease;
+            overflow: hidden;
+        }
+
+        #landing-page.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .landing-content {
+            text-align: center;
+            z-index: 2;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            background: -webkit-linear-gradient(120deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideUpFade 0.8s ease-out 0.2s forwards;
+        }
+
+        #intro-view {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            margin-top: 20px;
+        }
+        #intro-view.fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+            display: none; 
+        }
+
+        .start-btn {
+            padding: 16px 48px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUpFade 0.8s ease-out 0.4s forwards;
+        }
+        .start-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 35px -5px rgba(79, 70, 229, 0.6);
+        }
+
+        #selection-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            width: 100%;
+        }
+        #selection-view.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .mode-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            border-color: #818cf8;
+        }
+        .mode-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+        .mode-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; color: white; }
+        .mode-desc { color: #94a3b8; font-size: 0.95rem; }
+
+        .shape { position: absolute; filter: blur(50px); opacity: 0.4; animation: float 20s infinite ease-in-out alternate; z-index: 1; }
+        .shape-1 { width: 300px; height: 300px; background: #4f46e5; top: -50px; left: -50px; border-radius: 50%; }
+        .shape-2 { width: 400px; height: 400px; background: #c084fc; bottom: -100px; right: -100px; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; animation-delay: -5s; }
+        .shape-3 { width: 200px; height: 200px; background: #06b6d4; top: 40%; left: 20%; border-radius: 50%; animation-duration: 25s; }
+        @keyframes slideUpFade { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes float { 0% { transform: translate(0, 0) rotate(0deg); } 100% { transform: translate(30px, 50px) rotate(10deg); } }
+
+        /* --- APP LAYOUT --- */
+        .sidebar { width: var(--sidebar-width); background: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: transform 0.3s ease; z-index: 50; box-shadow: var(--shadow); }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+        .sidebar-content { flex: 1; overflow-y: auto; padding: 15px; }
+        .question-map { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        .map-item { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: var(--bg-body); border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; color: var(--text-sec); }
+        .map-item:hover { transform: scale(1.1); background: var(--border); }
+        .map-item.active { border-color: var(--primary); color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+        .map-item.correct { background-color: var(--success); color: white; border-color: var(--success); }
+        .map-item.wrong { background-color: var(--danger); color: white; border-color: var(--danger); }
+        .sidebar-footer { padding: 15px; border-top: 1px solid var(--border); text-align: center; font-size: 0.9rem; color: var(--text-sec); }
+
+        .main-content { flex: 1; display: flex; flex-direction: column; position: relative; overflow-y: auto; scroll-behavior: smooth; }
+        .top-bar { padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); z-index: 40; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: var(--text-main); background: none; border: none; }
+        .home-btn { background: none; border: none; cursor: pointer; font-size: 1.5rem; margin-right: 15px; color: var(--text-main); transition: transform 0.2s; display: flex; align-items: center; justify-content: center; }
+        .home-btn:hover { transform: scale(1.1); color: var(--primary); }
+        .progress-wrapper { flex: 1; margin: 0 20px; max-width: 400px; }
+        .progress-bg { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .quiz-area { max-width: 900px; margin: 0 auto; width: 100%; padding: 30px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .quiz-card { background: var(--bg-card); padding: 40px; border-radius: 24px; box-shadow: var(--shadow); animation: slideUp 0.4s ease-out; transition: background-color 0.3s; }
+        .question-number { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary); margin-bottom: 10px; font-weight: 700; }
+        .question-text { font-size: 1.4rem; font-weight: 600; margin-bottom: 30px; line-height: 1.5; color: var(--text-main); }
+        .options-list { display: grid; gap: 15px; }
+        .option-item { background: var(--bg-body); border: 2px solid transparent; padding: 18px 24px; border-radius: 12px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); font-size: 1.05rem; color: var(--text-main); position: relative; display: flex; align-items: center; }
+        .option-item:hover:not(.disabled) { border-color: var(--primary); background: var(--opt-hover); transform: translateX(5px); }
+        .option-item.disabled { cursor: default; opacity: 0.7; }
+        .option-item.correct { background: rgba(16, 185, 129, 0.1); border-color: var(--success); color: var(--success); font-weight: 600; }
+        .option-item.correct::after { content: "✓"; position: absolute; right: 20px; font-weight: bold; }
+        .option-item.wrong { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); color: var(--danger); }
+        .option-item.wrong::after { content: "✕"; position: absolute; right: 20px; font-weight: bold; }
+        
+        /* EXPLANATION BOX */
+        .explanation { margin-top: 30px; background: var(--exp-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--warning); display: none; animation: fadeIn 0.5s; position: relative; color: var(--exp-text); }
+        .exp-header { font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 1.1rem; }
+        .exp-content { line-height: 1.6; font-size: 1rem; }
+        
+        .footer-controls { margin-top: 40px; display: flex; justify-content: space-between; align-items: center; }
+        .btn { padding: 12px 28px; border-radius: 50px; border: none; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-secondary { background: var(--bg-body); color: var(--text-sec); }
+        .btn-secondary:hover:not(:disabled) { background: var(--border); color: var(--text-main); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-warning { background: var(--warning); color: #fff; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
+        .btn-warning:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .theme-toggle-wrapper { display: flex; align-items: center; }
+        .toggle-slot { position: relative; height: 32px; width: 60px; border: 2px solid var(--border); border-radius: 20px; background-color: var(--bg-body); transition: background-color 250ms; cursor: pointer; }
+        .toggle-checkbox { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+        .toggle-checkbox:checked ~ .toggle-slot { background-color: #374151; }
+        .toggle-button { transform: translate(4px, 3px); position: absolute; height: 22px; width: 22px; border-radius: 50%; background-color: #fbbf24; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: background-color 250ms, transform 500ms cubic-bezier(.26,2,.46,.71); display: flex; align-items: center; justify-content: center; }
+        .toggle-checkbox:checked ~ .toggle-slot .toggle-button { background-color: #f1f5f9; transform: translate(32px, 3px); }
+        .sun-icon { opacity: 1; transition: opacity 200ms; color: #fff; width: 14px; }
+        .moon-icon { opacity: 0; position: absolute; transition: opacity 200ms; color: #1e293b; width: 14px;}
+        .toggle-checkbox:checked ~ .toggle-slot .toggle-button .sun-icon { opacity: 0; }
+        .toggle-checkbox:checked ~ .toggle-slot .toggle-button .moon-icon { opacity: 1; }
+
+        .result-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(5px); }
+        .result-overlay.active { opacity: 1; pointer-events: auto; }
+        .result-box { background: var(--bg-card); padding: 50px; border-radius: 24px; text-align: center; max-width: 500px; width: 90%; transform: scale(0.9); transition: transform 0.3s; }
+        .result-overlay.active .result-box { transform: scale(1); }
+        .score-big { font-size: 4rem; font-weight: 800; background: -webkit-linear-gradient(var(--primary), #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 10px 0; }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            #selection-view.active { grid-template-columns: 1fr; }
+            .sidebar { position: fixed; left: -100%; height: 100%; width: 280px; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+            .sidebar.open { transform: translateX(100%); }
+            .menu-toggle { display: block; }
+            .quiz-card { padding: 25px; }
+            .question-map { grid-template-columns: repeat(4, 1fr); }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="landing-page">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        
+        <div class="landing-content">
+            <h1 class="hero-title">TRIẾT HỌC</h1>
+            
+            <div id="intro-view">
+                <button class="start-btn" onclick="showSelection()">
+                    CHỌN NỘI DUNG ÔN TẬP 🚀
+                </button>
+            </div>
+
+            <div id="selection-view">
+                <div class="mode-card" onclick="startQuizMode('chapter1')">
+                    <span class="mode-icon">📖</span>
+                    <div class="mode-title">Chương 1</div>
+                    <div class="mode-desc">Khái luận & Vấn đề cơ bản<br>(31 câu hỏi chuẩn)</div>
+                </div>
+                
+                <div class="mode-card" onclick="startQuizMode('full')">
+                    <span class="mode-icon">🔥</span>
+                    <div class="mode-title">Full 182 Câu</div>
+                    <div class="mode-desc">Thử thách toàn bộ kiến thức<br>(Ngân hàng đề)</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">Danh sách câu hỏi</div>
+            <button class="menu-toggle" onclick="toggleSidebar()" style="font-size:1.2rem">✕</button>
+        </div>
+        <div class="sidebar-content">
+            <div class="question-map" id="question-map"></div>
+        </div>
+        <div class="sidebar-footer">
+            <div style="display: flex; justify-content: space-around; font-size: 0.8rem; margin-bottom:10px">
+                <span style="color:var(--success)">● Đúng</span>
+                <span style="color:var(--danger)">● Sai</span>
+                <span style="color:var(--text-sec)">● Chưa làm</span>
+            </div>
+            <button class="btn btn-secondary" style="width:100%; justify-content:center" onclick="restartQuiz()">
+                ↺ Làm lại
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="top-bar">
+            <div style="display: flex; align-items: center;">
+                <button class="menu-toggle" onclick="toggleSidebar()" style="margin-right: 15px;">☰</button>
+                <button class="home-btn" onclick="returnToMenu()" title="Về màn hình chính">🏠</button>
+            </div>
+
+            <div class="progress-wrapper">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:5px; color:var(--text-sec)">
+                    <span id="progress-text">Tiến độ: 0/0</span>
+                    <span id="score-text">Đúng: 0</span>
+                </div>
+                <div class="progress-bg">
+                    <div class="progress-fill" id="progress-bar"></div>
+                </div>
+            </div>
+            <div class="theme-toggle-wrapper">
+                <label class="toggle-slot">
+                    <input type="checkbox" class="toggle-checkbox" id="theme-toggle">
+                    <div class="toggle-button">
+                        <svg class="sun-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg class="moon-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="quiz-area">
+            <div class="quiz-card" id="quiz-card">
+                <div class="question-number" id="q-number">CÂU HỎI 1</div>
+                <div class="question-text" id="q-text">Đang tải câu hỏi...</div>
+                <div class="options-list" id="options-container"></div>
+                
+                <div class="explanation" id="explanation-box">
+                    <div class="exp-header" id="exp-title">💡 Giải thích</div>
+                    <div class="exp-content" id="explanation-content"></div>
+                </div>
+
+                <div class="footer-controls">
+                    <button class="btn btn-secondary" id="btn-prev" onclick="prevQuestion()">← Câu trước</button>
+                    <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Câu sau →</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="result-overlay" id="result-overlay">
+        <div class="result-box">
+            <h2 style="margin-bottom:10px; color:var(--text-main)">Hoàn Thành! 🎉</h2>
+            <p style="color:var(--text-sec)">Bạn đã hoàn thành bài thi trắc nghiệm.</p>
+            <div class="score-big" id="final-score">0/0</div>
+            <p style="margin-bottom:30px; color:var(--text-main)" id="final-msg">Cố gắng hơn nhé!</p>
+            
+            <div style="display:flex; flex-direction:column; gap:10px; align-items:center">
+                <button class="btn btn-warning" id="btn-review-wrong" onclick="reviewWrongAnswers()" style="display:none; width: 100%; justify-content: center;">
+                     🔍 Ôn lại các câu sai
+                </button>
+
+                <div style="display:flex; gap:15px; width: 100%; justify-content: center;">
+                    <button class="btn btn-secondary" onclick="closeResult()">Xem lại</button>
+                    <button class="btn btn-primary" onclick="returnToMenu()">Về Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- GLOBAL DATA ---
+    const chap1Data = [{"q":"Triết học ra đời vào khoảng thời gian nào và ở đâu?","a":"Thế kỷ VIII - VI tr.CN tại Ấn Độ, Trung Hoa, Hy Lạp","e":"Đáp án: Thế kỷ VIII - VI tr.CN tại Ấn Độ, Trung Hoa, Hy Lạp"},{"q":"Nguồn gốc nhận thức dẫn đến sự ra đời của triết học là gì?","a":"Tư duy con người đạt trình độ trừu tượng hóa, khái quát hóa cao","e":"Đáp án: Tư duy con người đạt trình độ trừu tượng hóa, khái quát hóa cao"},{"q":"Nguồn gốc xã hội của triết học là gì?","a":"Phân công lao động xã hội, chế độ tư hữu và phân chia giai cấp","e":"Đáp án: Phân công lao động xã hội, chế độ tư hữu và phân chia giai cấp"},{"q":"Ở Trung Quốc, thuật ngữ \"Triết\" có nghĩa là gì?","a":"Sự truy tìm bản chất của đối tượng nhận thức (Trí)","e":"Đáp án: Sự truy tìm bản chất của đối tượng nhận thức (Trí)"},{"q":"Thuật ngữ \"Philosophia\" trong triết học Hy Lạp cổ đại mang ý nghĩa gì?","a":"Yêu mến sự thông thái, giải thích vũ trụ và định hướng hành vi","e":"Đáp án: Yêu mến sự thông thái, giải thích vũ trụ và định hướng hành vi"},{"q":"Theo quan điểm của Mác - Lênin, triết học là gì?","a":"Là hệ thống quan điểm lý luận chung nhất về thế giới và vị trí con người trong thế giới đó","e":"Đáp án: Là hệ thống quan điểm lý luận chung nhất về thế giới và vị trí con người trong thế giới đó"},{"q":"Đối tượng của triết học trong thời kỳ Hy Lạp Cổ đại là gì?","a":"Triết học tự nhiên (bao gồm tất cả tri thức toán, lý, thiên văn...)","e":"Đáp án: Triết học tự nhiên (bao gồm tất cả tri thức toán, lý, thiên văn...)"},{"q":"Quan niệm \"Triết học là khoa học của mọi khoa học\" đạt đỉnh cao ở triết gia nào?","a":"Hêghen (Triết học cổ điển Đức)","e":"Đáp án: Hêghen (Triết học cổ điển Đức)"},{"q":"Thế giới quan (TGQ) là gì?","a":"Là hệ thống quan điểm, niềm tin, lý tưởng xác định về thế giới và vị trí con người","e":"Đáp án: Là hệ thống quan điểm, niềm tin, lý tưởng xác định về thế giới và vị trí con người"},{"q":"Hình thức thế giới quan nào có đặc điểm \"yếu tố thực và ảo, thần và người hòa quyện\"?","a":"Thế giới quan Huyền thoại","e":"Đáp án: Thế giới quan Huyền thoại"},{"q":"Vấn đề cơ bản của triết học là gì?","a":"Mối quan hệ giữa vật chất và ý thức","e":"Đáp án: Mối quan hệ giữa vật chất và ý thức"},{"q":"Mặt thứ nhất của vấn đề cơ bản của triết học trả lời câu hỏi nào?","a":"Vật chất và ý thức, cái nào có trước, cái nào quyết định cái nào?","e":"Đáp án: Vật chất và ý thức, cái nào có trước, cái nào quyết định cái nào?"},{"q":"Chủ nghĩa duy tâm khách quan có quan điểm như thế nào?","a":"Tinh thần khách quan có trước và tồn tại độc lập với con người","e":"Đáp án: Tinh thần khách quan có trước và tồn tại độc lập với con người"},{"q":"Đặc điểm của Chủ nghĩa duy vật siêu hình (thế kỷ XVII-XVIII) là gì?","a":"Xem thế giới như cỗ máy khổng lồ, tĩnh tại","e":"Đáp án: Xem thế giới như cỗ máy khổng lồ, tĩnh tại"},{"q":"Thuyết \"Bất khả tri\" (Agnosticism) khẳng định điều gì?","a":"Con người không thể hiểu được bản chất thật sự của đối tượng","e":"Đáp án: Con người không thể hiểu được bản chất thật sự của đối tượng"},{"q":"Phương pháp siêu hình nhận thức đối tượng như thế nào?","a":"Trong trạng thái tĩnh tại, cô lập, tách rời","e":"Đáp án: Trong trạng thái tĩnh tại, cô lập, tách rời"},{"q":"Phép biện chứng duy vật (Mác - Lênin) là gì?","a":"Học thuyết về mối liên hệ phổ biến và sự phát triển của sự vật","e":"Đáp án: Học thuyết về mối liên hệ phổ biến và sự phát triển của sự vật"},{"q":"Điều kiện kinh tế - xã hội cho sự ra đời của triết học Mác là gì?","a":"Sự củng cố của phương thức sản xuất TBCN và cách mạng công nghiệp","e":"Đáp án: Sự củng cố của phương thức sản xuất TBCN và cách mạng công nghiệp"},{"q":"Giai cấp nào là nhân tố chính trị - xã hội quan trọng cho sự ra đời của triết học Mác?","a":"Giai cấp vô sản","e":"Đáp án: Giai cấp vô sản"},{"q":"Tiền đề lý luận của triết học Mác bao gồm những nguồn nào?","a":"Triết học cổ điển Đức, Kinh tế chính trị cổ điển Anh, CNXH không tưởng Pháp","e":"Đáp án: Triết học cổ điển Đức, Kinh tế chính trị cổ điển Anh, CNXH không tưởng Pháp"},{"q":"C.Mác đã kế thừa \"hạt nhân hợp lý\" nào trong triết học của Hêghen?","a":"Phép biện chứng","e":"Đáp án: Phép biện chứng"},{"q":"C.Mác đã kế thừa nội dung nào trong triết học của Phoi-ơ-bách?","a":"Chủ nghĩa duy vật","e":"Đáp án: Chủ nghĩa duy vật"},{"q":"Ba phát minh khoa học tự nhiên nào là tiền đề cho triết học Mác?","a":"Học thuyết tế bào, Học thuyết tiến hóa, Định luật bảo toàn & chuyển hóa năng lượng","e":"Đáp án: Học thuyết tế bào, Học thuyết tiến hóa, Định luật bảo toàn & chuyển hóa năng lượng"},{"q":"Nhân tố chủ quan trong sự ra đời triết học Mác là vai trò của ai?","a":"C.Mác và Ph.Ăngghen","e":"Đáp án: C.Mác và Ph.Ăngghen"},{"q":"Hoàn cảnh lịch sử giai đoạn Lênin bảo vệ và phát triển triết học Mác là gì?","a":"CNTB chuyển sang giai đoạn Đế quốc chủ nghĩa (CNĐQ)","e":"Đáp án: CNTB chuyển sang giai đoạn Đế quốc chủ nghĩa (CNĐQ)"},{"q":"Trung tâm cách mạng thế giới trong giai đoạn Lênin chuyển sang nước nào?","a":"Nga","e":"Đáp án: Nga"},{"q":"Giai đoạn 1917 - 1924 trong sự phát triển của triết học Mác - Lênin gắn liền với sự kiện gì?","a":"Lênin tổng kết thực tiễn, xây dựng CNXH","e":"Đáp án: Lênin tổng kết thực tiễn, xây dựng CNXH"},{"q":"Đối tượng nghiên cứu của triết học Mác - Lênin là gì?","a":"Giải quyết mối quan hệ vật chất - ý thức và nghiên cứu quy luật chung nhất của tự nhiên, xã hội, tư duy","e":"Đáp án: Giải quyết mối quan hệ vật chất - ý thức và nghiên cứu quy luật chung nhất của tự nhiên, xã hội, tư duy"},{"q":"Chức năng thế giới quan của triết học Mác - Lênin giúp con người điều gì?","a":"Nhận thức đúng đắn thế giới, hình thành quan điểm khoa học","e":"Đáp án: Nhận thức đúng đắn thế giới, hình thành quan điểm khoa học"},{"q":"Chức năng phương pháp luận của triết học Mác - Lênin là gì?","a":"Là cơ sở lý luận khoa học cho nhận thức và thực tiễn cách mạng","e":"Đáp án: Là cơ sở lý luận khoa học cho nhận thức và thực tiễn cách mạng"},{"q":"Vai trò của triết học Mác - Lênin đối với sự nghiệp đổi mới ở Việt Nam là gì?","a":"Là cơ sở lý luận cho công cuộc xây dựng CNXH và đổi mới","e":"Đáp án: Là cơ sở lý luận cho công cuộc xây dựng CNXH và đổi mới"}];
+
+    const fullData = [{"q": "Ai là người đưa ra định nghĩa:\n\"Vật chất là phạm trù triết học dùng để chỉ thực tại khách quan được đem lại cho con người trong cảm giác, được cảm giác của chúng ta chép lại, chụp lại, phản ánh và tồn tại không lệ thuộc vào cảm giác\"?", "a": "V.I.Lênin", "e": "Đáp án chính xác là: <b>V.I.Lênin</b>."}, {"q": "Ai là người kế thừa và phát triển chủ nghĩa\nMác trong giai đoạn chủ nghĩa đế quốc?", "a": "V.I.Lênin", "e": "Đáp án chính xác là: <b>V.I.Lênin</b>."}, {"q": "Ba hình thức cơ bản của thực tiễn là gì?", "a": "Hoạt động sản xuất vật chất, \nhoạt động chính trị - xã hội, \nthực nghiệm khoa học.", "e": "Đáp án chính xác là: <b>Hoạt động sản xuất vật chất, \nhoạt động chính trị - xã hội, \nthực nghiệm khoa học.</b>."}, {"q": "Bệnh chủ quan, duy ý chí biểu hiện như thế\nnào trong việc định ra chiến lược và sách lược cách mạng?", "a": "Chỉ căn cứ vào mong muốn chủ\nquan để định ra chiến lược và sách lược cách mạng", "e": "Đáp án chính xác là: <b>Chỉ căn cứ vào mong muốn chủ\nquan để định ra chiến lược và sách lược cách mạng</b>."}, {"q": "Biện chứng chủ quan là gì?", "a": "Là biện chứng của ý thức - tư duy\nbiện chứng", "e": "Đáp án chính xác là: <b>Là biện chứng của ý thức - tư duy\nbiện chứng</b>."}, {"q": "Biện chứng khách quan là gì?", "a": "Là biện chứng của các tồn tại vật chất", "e": "Đáp án chính xác là: <b>Là biện chứng của các tồn tại vật chất</b>."}, {"q": "Biện chứng là gì?", "a": "Là khái niệm dùng để chỉ mối liên\nhệ, tương tác, chuyển hóa và vận động phát triển theo quy luật của các sự vật, hiện tượng, quá trình trong tự nhiên, xã hội và tư duy", "e": "Đáp án chính xác là: <b>Là khái niệm dùng để chỉ mối liên\nhệ, tương tác, chuyển hóa và vận động phát triển theo quy luật của các sự vật, hiện tượng, quá trình trong tự nhiên, xã hội và tư duy</b>."}, {"q": "Bộ phận có quyền lực mạnh nhất trong kiến trúc thượng tầng của xã hội có đối kháng giai cấp là bộ phận nào?", "a": "Nhà nước", "e": "Đáp án chính xác là: <b>Nhà nước</b>."}, {"q": "Bộ phận giữ vai trò thế giới quan và phương\npháp luận chung của chủ nghĩa Mác-Lênin là gì?", "a": "Triết học Mác-Lênin", "e": "Đáp án chính xác là: <b>Triết học Mác-Lênin</b>."}, {"q": "Bộ phận nào trong chủ nghĩa Mác-Lênin có\nchức năng làm sáng tỏ bản chất những quy luật chung nhất của mọi sự vận động, phát triển của thế giới?", "a": "Triết học Mác-Lênin", "e": "Đáp án chính xác là: <b>Triết học Mác-Lênin</b>."}, {"q": "C.Mác – Ph.Ănghen đã kế thừa trực tiếp những tư tưởng triết học của triết gia nào?", "a": "L.Phoiơbắc và Hêghen", "e": "Đáp án chính xác là: <b>L.Phoiơbắc và Hêghen</b>."}, {"q": "Cách mạng tháng 8/1945 của Việt Nam \nlà bước nhảy gì?", "a": "Lớn, toàn bộ, đột biến", "e": "Đáp án chính xác là: <b>Lớn, toàn bộ, đột biến</b>."}, {"q": "Căn cứ vào đâu để phân chia giai cấp thành giai cấp cơ bản và giai cấp không cơ bản?", "a": "Vào phương thức sản xuất mà\ngiai cấp đó đại diện", "e": "Đáp án chính xác là: <b>Vào phương thức sản xuất mà\ngiai cấp đó đại diện</b>."}, {"q": "Chế độ cộng hòa, chế độ cộng hòa đại nghị, chế độ cộng hòa tổng thống, chế độ cộng hòa thủ tướng, chế độ quân chủ lập hiến, nhà nước liên bang…thuộc kiểu nhà nước nào?", "a": "Nhà nước tư sản", "e": "Đáp án chính xác là: <b>Nhà nước tư sản</b>."}, {"q": "Chọn cụm từ thích hợp điềm vào chỗ trống: \"Nhận thức là … tích cực, sáng tạo thế giới khách quan vào bộ óc con người trên cơ cở thực tiễn, nhằm sáng tạo ra những tri thức về thế giới khách quan đó.\"", "a": "Quá trình phản ánh", "e": "Đáp án chính xác là: <b>Quá trình phản ánh</b>."}, {"q": "Chọn cụm từ thích hợp điền vào chỗ trống: “Quy luật là những mối liên hệ … giữa các mặt,\ncác yếu tố, các thuộc tính bên trong mỗi một sự vật, hay giữa các sự vật, hiện tượng với nhau”.", "a": "Khách quan, bản chất, tất nhiên, \nphổ biến và lặp lại.", "e": "Đáp án chính xác là: <b>Khách quan, bản chất, tất nhiên, \nphổ biến và lặp lại.</b>."}, {"q": "CHỌN PHÁN ĐOÁN ĐÚNG về mối quan hệ giữa vận động và phát triển?", "a": "Phát triển là quá trình vận động theo \nkhuynh hướng đi lên từ thấp đến cao, từ đơn giản đến phức tạp, từ kém hoàn thiện đến hoàn thiện hơn.", "e": "Đáp án chính xác là: <b>Phát triển là quá trình vận động theo \nkhuynh hướng đi lên từ thấp đến cao, từ đơn giản đến phức tạp, từ kém hoàn thiện đến hoàn thiện hơn.</b>."}, {"q": "Chủ nghĩa duy vật biện chứng giải quyết mối\nquan hệ giữa vật chất và ý thức như thế nào?", "a": "Ý thức phụ thuộc vào vật chất nhưng\nnó có tính độc lập tương đối", "e": "Đáp án chính xác là: <b>Ý thức phụ thuộc vào vật chất nhưng\nnó có tính độc lập tương đối</b>."}, {"q": "Chủ nghĩa duy vật là gì?", "a": "Là học thuyết triết học cho rằng vật\nchất có trước, ý thức có sau, vật chất quyết định ý thức", "e": "Đáp án chính xác là: <b>Là học thuyết triết học cho rằng vật\nchất có trước, ý thức có sau, vật chất quyết định ý thức</b>."}, {"q": "Chủ nghĩa duy vật siêu hình quan niệm như\nthế nào về nguồn gốc của ý thức?", "a": "Đồng nhất ý thức với vật chất, coi ý\nthức cũng chỉ là một dạng vật chất đặc biệt, do vật chất sản sinh ra", "e": "Đáp án chính xác là: <b>Đồng nhất ý thức với vật chất, coi ý\nthức cũng chỉ là một dạng vật chất đặc biệt, do vật chất sản sinh ra</b>."}, {"q": "Chủ nghĩa Mác ra đời vào thời gian nào?", "a": "Những năm 40 của thế kỷ XIX", "e": "Đáp án chính xác là: <b>Những năm 40 của thế kỷ XIX</b>."}, {"q": "Chủ nghĩa Mác-Lênin hình thành và phát triển\nqua mấy giai đoạn?", "a": "3 giai đoạn", "e": "Đáp án chính xác là: <b>3 giai đoạn</b>."}, {"q": "Chức năng của triết học Mácxít là gì?", "a": "Chức năng thế giới quan\nvà phương pháp luận", "e": "Đáp án chính xác là: <b>Chức năng thế giới quan\nvà phương pháp luận</b>."}, {"q": "Cơ quan vật chất của ý thức là yếu tố nào?", "a": "Bộ óc người", "e": "Đáp án chính xác là: <b>Bộ óc người</b>."}, {"q": "Cơ sở hạ tầng là gì?", "a": "Đó là toàn bộ những quan hệ sản xuất hợp thành cơ cấu kinh tế của xã hội.", "e": "Đáp án chính xác là: <b>Đó là toàn bộ những quan hệ sản xuất hợp thành cơ cấu kinh tế của xã hội.</b>."}, {"q": "Cơ sở lý luận của quan điểm toàn diện là\nnguyên lý nào?", "a": "Nguyên lý về mối liên hệ phổ biến", "e": "Đáp án chính xác là: <b>Nguyên lý về mối liên hệ phổ biến</b>."}, {"q": "Con đường phát triển của sự vật mà quy luật \nphủ định của phủ định vạch ra là con đường nào?", "a": "Con đường \"xoáy ốc\"", "e": "Đáp án chính xác là: <b>Con đường \"xoáy ốc\"</b>."}, {"q": "Con người có khả năng nhận thức được thế \ngiới hay không?", "a": "Có khả năng nhận thức \nnhưng nhận thức là một quá trình.", "e": "Đáp án chính xác là: <b>Có khả năng nhận thức \nnhưng nhận thức là một quá trình.</b>."}, {"q": "Đặc điểm chung của các nhà triết học duy tâm\nlà gì?", "a": "Phủ nhận đặc tính tồn tại khách quan\ncủa vật chất", "e": "Đáp án chính xác là: <b>Phủ nhận đặc tính tồn tại khách quan\ncủa vật chất</b>."}, {"q": "Đấu tranh giai cấp, đấu tranh giải phóng dân \ntộc, đấu tranh cho hòa bình, dân chủ, tiến bộ xã hội là nội dung của hoạt động nào?", "a": "Hoạt động chính trị - xã hội", "e": "Đáp án chính xác là: <b>Hoạt động chính trị - xã hội</b>."}, {"q": "Đề cập đến thái độ của con người đối với\nđối tượng phản ánh là đề cập đến yếu tố nào trong kết cấu của ý thức?", "a": "Tình cảm", "e": "Đáp án chính xác là: <b>Tình cảm</b>."}, {"q": "Để nhận thức và cải tạo xã hội cần phải \nxuất phát từ đâu?", "a": "Nền sản xuất vật chất của xã hội", "e": "Đáp án chính xác là: <b>Nền sản xuất vật chất của xã hội</b>."}, {"q": "Điền vào chỗ trống để hoàn thành khái niệm\nkết quả:\n“Phạm trù kết quả dùng để chỉ những….. xuất hiện do….. giữa các mặt, các yếu tố trong một sự vật, hiện tượng, hoặc giữa các sự vật hiện tượng”.", "a": "Biến đổi - sự tác động", "e": "Đáp án chính xác là: <b>Biến đổi - sự tác động</b>."}, {"q": "Điền vào chỗ trống để hoàn thành khái niệm\nnguyên nhân:\n“Phạm trù nguyên nhân dùng để chỉ…..giữa các mặt trong một sự vật, hiện tượng hoặc giữa các sự vật, hiện tượng với nhau để từ đó tạo ra…..”.", "a": "Sự tác động lẫn nhau – sự biến đổi \nnhất định.", "e": "Đáp án chính xác là: <b>Sự tác động lẫn nhau – sự biến đổi \nnhất định.</b>."}, {"q": "Đói nghèo\" và \"Dốt nát\", hiện tượng nào là\nnguyên nhân, hiện tượng nào là kết quả?", "a": "Hiện tượng này vừa là nguyên nhân \nvừa là kết quả của hiện tượng kia.", "e": "Đáp án chính xác là: <b>Hiện tượng này vừa là nguyên nhân \nvừa là kết quả của hiện tượng kia.</b>."}, {"q": "Đối tượng nghiên cứu của triết học Mác-Lênin\nlà gì?", "a": "Giải quyết mối quan hệ giữa vật chất\nvà ý thức trên lập trường duy vật biện chứng và nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy.", "e": "Đáp án chính xác là: <b>Giải quyết mối quan hệ giữa vật chất\nvà ý thức trên lập trường duy vật biện chứng và nghiên cứu những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy.</b>."}, {"q": "Đồng nhất vật chất với \"khối lượng\", đó là\nquan niệm về vật chất của các nhà triết học ở thời kỳ nào?", "a": "Các nhà triết học duy vật cận đại", "e": "Đáp án chính xác là: <b>Các nhà triết học duy vật cận đại</b>."}, {"q": "Giai cấp cơ bản là giai cấp:", "a": "Gắn với phương thức sản xuất \nthống trị", "e": "Đáp án chính xác là: <b>Gắn với phương thức sản xuất \nthống trị</b>."}, {"q": "Giai cấp là một phạm trù kinh tế - xã hội, giai cấp có tính chất gì?", "a": "Tính lịch sử", "e": "Đáp án chính xác là: <b>Tính lịch sử</b>."}, {"q": "Giai cấp xuất hiện bắt đầu từ hình thái kinh tế - xã hội nào?", "a": "Chiếm hữu nô lệ", "e": "Đáp án chính xác là: <b>Chiếm hữu nô lệ</b>."}, {"q": "Giai đoạn nhận thức nào gắn liền trực tiếp \nvới thực tiễn?", "a": "Nhận thức cảm tính", "e": "Đáp án chính xác là: <b>Nhận thức cảm tính</b>."}, {"q": "Giai đoạn nhận thức nào phản ánh trừu tượng, \nkhái quát hóa những đặc điểm chung, bản chất của sự vật, hiện tượng?", "a": "Nhận thức lý tính", "e": "Đáp án chính xác là: <b>Nhận thức lý tính</b>."}, {"q": "Hai khái niệm \"triết học\" và \"thế giới quan\"\nliên hệ với nhau như thế nào?", "a": "Triết học không phải là toàn bộ thế\ngiới quan mà là hạt nhân lý luận chung nhất của thế giới quan.", "e": "Đáp án chính xác là: <b>Triết học không phải là toàn bộ thế\ngiới quan mà là hạt nhân lý luận chung nhất của thế giới quan.</b>."}, {"q": "Hãy chọn quan điểm đúng về Chủ nghĩa \nduy vật lịch sử?", "a": "Là học thuyết nghiên cứu những quy luật, những động lực phát triển xã hội.", "e": "Đáp án chính xác là: <b>Là học thuyết nghiên cứu những quy luật, những động lực phát triển xã hội.</b>."}, {"q": "Hệ thống triết học nào quan niệm sự vật là\nphức hợp của các cảm giác?", "a": "Chủ nghĩa duy tâm chủ quan", "e": "Đáp án chính xác là: <b>Chủ nghĩa duy tâm chủ quan</b>."}, {"q": "Hình thức nào trong giai đoạn nhận thức cảm \ntính cho ta hình ảnh tương đối trọn vẹn về sự vật, hiện tượng?", "a": "Tri giác", "e": "Đáp án chính xác là: <b>Tri giác</b>."}, {"q": "Hình thức nào trong giai đoạn nhận thức cảm \ntính giúp con người tái hiện sự vật trong trí nhớ khi sự vật không còn trực tiếp tác động vào giác quan của con người?", "a": "Biểu tượng", "e": "Đáp án chính xác là: <b>Biểu tượng</b>."}, {"q": "Hình thức phản ánh nào biểu hiện qua tính\nkích thích, tính cảm ứng, phản xạ?", "a": "Phản ánh sinh học", "e": "Đáp án chính xác là: <b>Phản ánh sinh học</b>."}, {"q": "Hình thức phản ánh nào chỉ có ở con người?", "a": "Phản ánh năng động, sáng tạo", "e": "Đáp án chính xác là: <b>Phản ánh năng động, sáng tạo</b>."}, {"q": "Hình thứuc phản ánh nào đặc trưng cho vật\nchất vô sinh?", "a": "Phản ánh lý - hóa", "e": "Đáp án chính xác là: <b>Phản ánh lý - hóa</b>."}, {"q": "Hoạt động tất yếu, đầu tiên của con người \nvà xã hội loài người là hoạt động nào?", "a": "Hoạt động sản xuất vật chất", "e": "Đáp án chính xác là: <b>Hoạt động sản xuất vật chất</b>."}, {"q": "Kết quả của sự tổng kết, sự khái quát hóa các kinh nghiệm xã hội để hình thành nên những quan điểm, những tư tưởng về chính trị, pháp luật, triết học, đạo đức, nghệ thuật, tôn giáo,... được gọi là gì?", "a": "Hệ tư tưởng", "e": "Đáp án chính xác là: <b>Hệ tư tưởng</b>."}, {"q": "Khi khoa học tự nhiên phát hiện ra tia x; hiện\ntượng phóng xạ; điện tử (là một thành phần cấu tạo nên nguyên tử). Theo V.I.Lênin điều đó chứng tỏ gì?", "a": "Giới hạn hiểu biết trước đây của\nchúng ta về vật chất mất đi", "e": "Đáp án chính xác là: <b>Giới hạn hiểu biết trước đây của\nchúng ta về vật chất mất đi</b>."}, {"q": "Khoa học nào là hạt nhân của thế giới quan?", "a": "Triết học", "e": "Đáp án chính xác là: <b>Triết học</b>."}, {"q": "Lực lượng sản xuất bao gồm những nhân tố\nnào?", "a": "Tư liệu sản xuất và người lao động", "e": "Đáp án chính xác là: <b>Tư liệu sản xuất và người lao động</b>."}, {"q": "Lượng của sự vật là gì?", "a": "Là phạm trù của triết học, chỉ tính \nquy định khách quan vốn có của sự vật về mặt số lượng, quy mô…", "e": "Đáp án chính xác là: <b>Là phạm trù của triết học, chỉ tính \nquy định khách quan vốn có của sự vật về mặt số lượng, quy mô…</b>."}, {"q": "Mặt đối lập có nguồn gốc từ đâu?", "a": "Là cái vốn có của thế giới vật chất", "e": "Đáp án chính xác là: <b>Là cái vốn có của thế giới vật chất</b>."}, {"q": "Mâu thuẫn đối kháng tồn tại ở đâu?", "a": "Trong xã hội có đấu tranh giai cấp", "e": "Đáp án chính xác là: <b>Trong xã hội có đấu tranh giai cấp</b>."}, {"q": "Mâu thuẫn giữa các giai cấp cơ bản có lợi ích đối lập nhau trong một phương thức sản xuất là biểu hiện về mặt xã hội của mâu thuẫn nào?", "a": "Mâu thuẫn giữa lực lượng sản xuất\nvà quan hệ sản xuất", "e": "Đáp án chính xác là: <b>Mâu thuẫn giữa lực lượng sản xuất\nvà quan hệ sản xuất</b>."}, {"q": "Mâu thuẫn nổi lên hàng đầu ở một giai đoạn \nphát triển của sự vật và chi phối các mâu thuẫn khác trong giai đoạn đó gọi là mâu thuẫn gì?", "a": "Mâu thuẫn chủ yếu", "e": "Đáp án chính xác là: <b>Mâu thuẫn chủ yếu</b>."}, {"q": "Mục đích cao nhất mà một cuộc đấu tranh giai cấp cần đạt được là gì?", "a": "Giải phóng lực lượng sản xuất khỏi sự kìm hãm của những quan hệ sản xuất đã lỗi thời, tạo điều kiện để đẩy nhanh sự phát triển của lực lượng sản xuất và phát triển xã hội.", "e": "Đáp án chính xác là: <b>Giải phóng lực lượng sản xuất khỏi sự kìm hãm của những quan hệ sản xuất đã lỗi thời, tạo điều kiện để đẩy nhanh sự phát triển của lực lượng sản xuất và phát triển xã hội.</b>."}, {"q": "Ngày nay, nhân tố nào đã trở thành “lực lượng sản xuất trực tiếp”?", "a": "Khoa học", "e": "Đáp án chính xác là: <b>Khoa học</b>."}, {"q": "Nguồn gốc của mối liên hệ phổ biến là từ đâu?", "a": "Do tính thống nhất vật chất\ncủa thế giới", "e": "Đáp án chính xác là: <b>Do tính thống nhất vật chất\ncủa thế giới</b>."}, {"q": "Nguồn gốc tự nhiên của ý thức là gì?", "a": "Hoạt động của bộ não cùng mối\nquan hệ giữa con người với thế giới khách quan là nguồn gốc tự nhiên của ý thức", "e": "Đáp án chính xác là: <b>Hoạt động của bộ não cùng mối\nquan hệ giữa con người với thế giới khách quan là nguồn gốc tự nhiên của ý thức</b>."}, {"q": "Nhà triết học nào cho rằng \"lửa\" là thực thể\nđầu tiên của thế giới?", "a": "Heraclit", "e": "Đáp án chính xác là: <b>Heraclit</b>."}, {"q": "Nhà triết học nào cho rằng \"nguyên tử\" là thực\nthể đầu tiên, quy định toàn bộ thế giới vật chất?", "a": "Đêmôcrit", "e": "Đáp án chính xác là: <b>Đêmôcrit</b>."}, {"q": "Nhà triết học nào cho rằng cơ sở vật chất đầu \ntiên của thế giới là \"nước\"?", "a": "Ta-lét", "e": "Đáp án chính xác là: <b>Ta-lét</b>."}, {"q": "Nhận thức lý tính là nhận thức được thực hiện \nthông qua các hình thức cơ bản nào?", "a": "Khái niệm, phán đoán, suy lý", "e": "Đáp án chính xác là: <b>Khái niệm, phán đoán, suy lý</b>."}, {"q": "Nhân tố cơ bản, trực tiếp tạo thành nguồn gốc\nxã hội của ý thức là nhân tố nào?", "a": "Lao động và ngôn ngữ", "e": "Đáp án chính xác là: <b>Lao động và ngôn ngữ</b>."}, {"q": "Những phát minh của vật lý học cận đại đã\nbác bỏ khuynh hướng triết học nào?", "a": "Duy vật chất phác\nvà duy vật siêu hình", "e": "Đáp án chính xác là: <b>Duy vật chất phác\nvà duy vật siêu hình</b>."}, {"q": "Những phát minh nào của khoa học tự nhiên\nnửa đầu thế kỷ XIX tác động đến sự hình thành triết học Mác?\nCHỌN PHÁN ĐOÁN SAI", "a": "Thuyết tương đối rộng \nvà thuyết tương đối hẹp", "e": "Đáp án chính xác là: <b>Thuyết tương đối rộng \nvà thuyết tương đối hẹp</b>."}, {"q": "Những tri thức, những quan niệm của con người hình thành một cách trực tiếp trong các hoạt động trực tiếp hằng ngày nhưng chưa hệ thống hóa, chưa tổng hợp và khái quát hóa được gọi là gì?", "a": "Ý thức xã hội thông thường hay \ný thức thường ngày", "e": "Đáp án chính xác là: <b>Ý thức xã hội thông thường hay \ný thức thường ngày</b>."}, {"q": "Những tư tưởng, những quan điểm được tổng hợp, được hệ thống hóa và khái quát hóa thành các học thuyết xã hội dưới dạng các khái niệm, các phạm trù và các quy luật được gọi là gì?", "a": "Ý thức lý luận hay ý thức khoa học", "e": "Đáp án chính xác là: <b>Ý thức lý luận hay ý thức khoa học</b>."}, {"q": "Nội dung mặt thứ II của vấn đề cơ bản của\ntriết học là gì?", "a": "Con người có khả năng nhận thức\nđược thế giới hay không?", "e": "Đáp án chính xác là: <b>Con người có khả năng nhận thức\nđược thế giới hay không?</b>."}, {"q": "Nội dung phán đoán nào sau đây không phải\nlà điều kiện, tiền đề khách quan của sự ra đời triết học Mác?", "a": "Tài năng, phẩm chất\ncủa C.Mác và Ănghen", "e": "Đáp án chính xác là: <b>Tài năng, phẩm chất\ncủa C.Mác và Ănghen</b>."}, {"q": "Phạm trù dùng để chỉ tính quy định, mối liên \nhệ thống nhất giữa chất và lượng, là khoảng giới hạn trong đó sự thay đổi về lượng chưa làm thay đổi căn bản chất của sự vật, hiện tượng?", "a": "Độ", "e": "Đáp án chính xác là: <b>Độ</b>."}, {"q": "Phạm trù nào biểu thị cách thức mà con người \nsử dụng để tiến hành quá trình sản xuất của xã hội ở những giai đoạn lịch sử nhất định?", "a": "Phương thức sản xuất", "e": "Đáp án chính xác là: <b>Phương thức sản xuất</b>."}, {"q": "Phạm trù nào thể hiện sự phủ định tạo điều \nkiện, tiền đề cho quá trình phát triển của sự vật?", "a": "Phủ định biện chứng", "e": "Đáp án chính xác là: <b>Phủ định biện chứng</b>."}, {"q": "Phạm trù nào thể hiện sự thay thế sự vật, \nhiện tượng này bằng sự vật, hiện tượng khác, thay thế hình thái tồn tại này bằng hình thái tồn tại khác của cùng một sự vật?", "a": "Phủ định", "e": "Đáp án chính xác là: <b>Phủ định</b>."}, {"q": "Phạm trù triết học nào dùng để chỉ tính quy\nđịnh khách quan vốn có của sự vật, hiện tượng, là sự thống nhất hữu cơ các thuộc tính cấu thành nó, phân biệt nó với cái khác?", "a": "Chất", "e": "Đáp án chính xác là: <b>Chất</b>."}, {"q": "Phản ánh năng động, sáng tạo đặc trưng cho\ndạng vật chất nào?", "a": "Bộ óc người", "e": "Đáp án chính xác là: <b>Bộ óc người</b>."}, {"q": "Phản ánh nào mang tính thụ động, chưa có\nđịnh hướng lựa chọn của vật chất tác động?", "a": "Phản ánh lý - hóa", "e": "Đáp án chính xác là: <b>Phản ánh lý - hóa</b>."}, {"q": "Phản ánh tâm lý là phản ánh của dạng vật chất\nnào?", "a": "Động vật có hệ thần kinh trung ương", "e": "Đáp án chính xác là: <b>Động vật có hệ thần kinh trung ương</b>."}, {"q": "Phát minh khoa học nào đã chứng minh\nkhông gian, thời gian, khối lượng luôn biến đổi cùng với sự vận động của vật chất?", "a": "Thuyết tương đối của Anhxtanh", "e": "Đáp án chính xác là: <b>Thuyết tương đối của Anhxtanh</b>."}, {"q": "Phép biện chứng duy vật bao gồm những\nnguyên lý cơ bản nào?", "a": "Nguyên lý về mối liên hệ phổ biến\nvà sự phát triển", "e": "Đáp án chính xác là: <b>Nguyên lý về mối liên hệ phổ biến\nvà sự phát triển</b>."}, {"q": "Phép biện chứng duy vật nghiên cứu những\nquy luật nào?", "a": "Những quy luật chung nhất, phổ biến \ntác động toàn bộ các lĩnh vực tự nhiên, xã hội và tư duy.", "e": "Đáp án chính xác là: <b>Những quy luật chung nhất, phổ biến \ntác động toàn bộ các lĩnh vực tự nhiên, xã hội và tư duy.</b>."}, {"q": "Phương diện nào trong phương thức sản xuất \nthể hiện mối quan hệ giữa con người với tự nhiên trong quá trình sản xuất vật chất?", "a": "Lực lượng sản xuất", "e": "Đáp án chính xác là: <b>Lực lượng sản xuất</b>."}, {"q": "Phương diện nào trong phương thức sản xuất \nthể hiện mối quan hệ giữa người với người trong quá trình sản xuất vật chất?", "a": "Tư liệu lao động", "e": "Đáp án chính xác là: <b>Tư liệu lao động</b>."}, {"q": "Phương thức sản xuất bao gồm những yếu tố \nnào?", "a": "Lực lượng sản xuất\nvà quan hệ sản xuất", "e": "Đáp án chính xác là: <b>Lực lượng sản xuất\nvà quan hệ sản xuất</b>."}, {"q": "Quan điểm của chủ nghĩa duy tâm chủ quan?", "a": "\"Không có cái lý nào ngoài tâm\",\n\"Ngoài tâm không có vật\"", "e": "Đáp án chính xác là: <b>\"Không có cái lý nào ngoài tâm\",\n\"Ngoài tâm không có vật\"</b>."}, {"q": "Quan điểm của trường phái triết học nào cho\nrằng cơ sở của mối liên hệ giữa các sự vật, hiện tượng, quá trình là ở tính thống nhất vật chất của thế giới?", "a": "Chủ nghĩa duy vật biện chứng", "e": "Đáp án chính xác là: <b>Chủ nghĩa duy vật biện chứng</b>."}, {"q": "Quan điểm nào của L.Phoiơbắc đã ảnh hưởng\nđến lập trường thế giới quan của Mác?", "a": "Chủ nghĩa duy vật, vô thần", "e": "Đáp án chính xác là: <b>Chủ nghĩa duy vật, vô thần</b>."}, {"q": "Quan điểm siêu hình xem xét sự phát triển của\nthế giới vật chất như thế nào?", "a": "Sự phát triển chỉ là sự tăng, giảm đơn\nthuần về lượng", "e": "Đáp án chính xác là: <b>Sự phát triển chỉ là sự tăng, giảm đơn\nthuần về lượng</b>."}, {"q": "Quan điểm ủng hộ cái mới tiến bộ, chống lại \ncái cũ, cái lỗi thời kìm hãm sự phát triển là quan điểm được rút ra trực tiếp từ quy luật nào của phép biện chứng?", "a": "Quy luật phủ định của phủ định", "e": "Đáp án chính xác là: <b>Quy luật phủ định của phủ định</b>."}, {"q": "Quan hệ biện chứng giữa lực lượng sản xuất và quan hệ sản xuất thể hiện như thế nào?", "a": "Lực lượng sản xuất quyết định quan hệ sản xuất; quan hệ sản xuất tác động trở lại lực lượng sản xuất", "e": "Đáp án chính xác là: <b>Lực lượng sản xuất quyết định quan hệ sản xuất; quan hệ sản xuất tác động trở lại lực lượng sản xuất</b>."}, {"q": "Quan hệ sản xuất không bao gồm quan hệ nào dưới đây?", "a": "Quan hệ tình cảm giữa\nnhà tư bản và công nhân", "e": "Đáp án chính xác là: <b>Quan hệ tình cảm giữa\nnhà tư bản và công nhân</b>."}, {"q": "Quan niệm được coi là tiến bộ nhất về vật chất\nthời kỳ cổ đại là gì?", "a": "Nguyên tử", "e": "Đáp án chính xác là: <b>Nguyên tử</b>."}, {"q": "Quan niệm nào dưới đây của chủ nghĩa duy\ntâm khách quan?", "a": "\"Ý niệm, tinh thần, ý niệm tuyệt đối\ntinh thần thế giới là cái có trước thế giới vật chất\"", "e": "Đáp án chính xác là: <b>\"Ý niệm, tinh thần, ý niệm tuyệt đối\ntinh thần thế giới là cái có trước thế giới vật chất\"</b>."}, {"q": "Quy luật nào đóng vai trò hạt nhân của phép\nbiện chứng duy vật?", "a": "Quy luật thống nhất và đấu tranh \ngiữa các mặt đối lập.", "e": "Đáp án chính xác là: <b>Quy luật thống nhất và đấu tranh \ngiữa các mặt đối lập.</b>."}, {"q": "Quy luật nào là quy luật cơ bản nhất của sự vận động và phát triển xã hội?", "a": "Quy luật quan hệ sản xuất phù hợp với trình độ phát triển của lực lượng sản xuất.", "e": "Đáp án chính xác là: <b>Quy luật quan hệ sản xuất phù hợp với trình độ phát triển của lực lượng sản xuất.</b>."}, {"q": "Quy luật thống nhất và đấu tranh của các mặt \nđối lập nói lên đặc tính nào của sự vận động và phát triển?", "a": "Nguồn gốc và động lực \ncủa sự vận động và phát triển.", "e": "Đáp án chính xác là: <b>Nguồn gốc và động lực \ncủa sự vận động và phát triển.</b>."}, {"q": "Sự khác nhau cơ bản giữa hình thức phản ánh\ný thức và các hình thức phản ánh khác là ở chỗ nào?", "a": "Tính năng động, sáng tạo\ncủa phản ánh", "e": "Đáp án chính xác là: <b>Tính năng động, sáng tạo\ncủa phản ánh</b>."}, {"q": "Sự phát triển của các sự vật, hiện tượng trong\nthế giới có những tính chất nào?", "a": "a.  Tính khách quan, tính lịch sử, tính đa dạng, phong phú.", "e": "Đáp án chính xác là: <b>a.  Tính khách quan, tính lịch sử, tính đa dạng, phong phú.</b>."}, {"q": "Sự vận động và phát triển của phương thức sản xuất bắt đầu từ sự biến đổi của yếu tố nào?", "a": "Lực lượng sản xuất", "e": "Đáp án chính xác là: <b>Lực lượng sản xuất</b>."}, {"q": "Thế giới quan là gì?", "a": "Là toàn bộ những quan điểm về thế giới và về vị trí của con người trong thế giới đó", "e": "Đáp án chính xác là: <b>Là toàn bộ những quan điểm về thế giới và về vị trí của con người trong thế giới đó</b>."}, {"q": "Theo quan điểm C.Mác – Ph.Ăngghen, khi chưa có chính quyền, cuộc đấu tranh giai cấp của giai cấp vô sản diễn ra với các hình thức nào? CHỌN PHƯƠNG ÁN SAI", "a": "Đấu tranh quân sự", "e": "Đáp án chính xác là: <b>Đấu tranh quân sự</b>."}, {"q": "Theo quan điểm của chủ nghĩa duy vật biện\nchứng có mấy nguồn gốc, đó là nguồn gốc nào?", "a": "Hai, nguồn gốc tự nhiên và nguồn\ngốc xã hội", "e": "Đáp án chính xác là: <b>Hai, nguồn gốc tự nhiên và nguồn\ngốc xã hội</b>."}, {"q": "Theo quan điểm của chủ nghĩa duy vật biện\nchứng, giữa biện chứng khách quan và biện chứng chủ quan quan hệ với nhau như thế nào?", "a": "Biện chứng chủ quan phản ánh biện\nchứng khách quan", "e": "Đáp án chính xác là: <b>Biện chứng chủ quan phản ánh biện\nchứng khách quan</b>."}, {"q": "Theo quan điểm của chủ nghĩa duy vật lịch sử, bản chất của con người là gì?", "a": "Tổng hòa các quan hệ xã hội", "e": "Đáp án chính xác là: <b>Tổng hòa các quan hệ xã hội</b>."}, {"q": "Theo quan điểm của chủ nghĩa duy vật lịch sử, con người là gì?", "a": "Là thực thể sinh học - xã hội", "e": "Đáp án chính xác là: <b>Là thực thể sinh học - xã hội</b>."}, {"q": "Theo quan điểm của chủ nghĩa duy vật lịch sử, nội dung quan trọng hàng đầu trong việc giải phóng con người là gì?", "a": "Đấu tranh giai cấp để thay thế chế độ sở hữu tư nhân tư bản chủ nghĩa về tư liệu sản xuất và phương thức sản xuất tư bản chủ nghĩa, để giải phóng con người về phương diện chính trị.", "e": "Đáp án chính xác là: <b>Đấu tranh giai cấp để thay thế chế độ sở hữu tư nhân tư bản chủ nghĩa về tư liệu sản xuất và phương thức sản xuất tư bản chủ nghĩa, để giải phóng con người về phương diện chính trị.</b>."}, {"q": "Theo quan điểm của triết học Mác – Lênin, kết cấu xã hội - giai cấp do yếu tố nào quy định?", "a": "Trình độ phát triển của\nphương thức sản xuất", "e": "Đáp án chính xác là: <b>Trình độ phát triển của\nphương thức sản xuất</b>."}, {"q": "Theo quan điểm của triết học Mác – Lênin, nguyên nhân sâu xa của sự xuất hiện giai cấp là gì?", "a": "Sự phát triển của lực lượng sản xuất làm cho năng suất lao động tăng lên, xuất hiện \"của dư\"", "e": "Đáp án chính xác là: <b>Sự phát triển của lực lượng sản xuất làm cho năng suất lao động tăng lên, xuất hiện \"của dư\"</b>."}, {"q": "Theo quan điểm của triết học Mác – Lênin, nguyên nhân trực tiếp của sự xuất hiện giai cấp là gì?", "a": "Sự xuất hiện chế độ tư hữu về\ntư liệu sản xuất", "e": "Đáp án chính xác là: <b>Sự xuất hiện chế độ tư hữu về\ntư liệu sản xuất</b>."}, {"q": "Theo quan điểm của triết học Mác – Lênin, sự\nkhác biệt căn bản giữa sự vận động và sự phát triển là gì?", "a": "Sự phát triển là trường hợp đặc biệt \ncủa sự vận động, sự phát triển là sự vận động theo chiều hướng tiến lên.", "e": "Đáp án chính xác là: <b>Sự phát triển là trường hợp đặc biệt \ncủa sự vận động, sự phát triển là sự vận động theo chiều hướng tiến lên.</b>."}, {"q": "Theo quan điểm của triết học Mác – Lênin, vai trò của đấu tranh giai cấp là gì?", "a": "Đấu tranh giai cấp là động lực trực tiếp, quan trọng của lịch sử trong điều kiện có giai cấp đối kháng.", "e": "Đáp án chính xác là: <b>Đấu tranh giai cấp là động lực trực tiếp, quan trọng của lịch sử trong điều kiện có giai cấp đối kháng.</b>."}, {"q": "Theo quan điểm duy vật biện chứng, quan\nđiểm nào sau đây ĐÚNG?", "a": "Vật chất là cái tồn tại khách quan", "e": "Đáp án chính xác là: <b>Vật chất là cái tồn tại khách quan</b>."}, {"q": "Theo quan điểm duy vật biện chứng, ý thức\ntác động trở lại vật chất thông qua:", "a": "Hoạt động thực tiễn", "e": "Đáp án chính xác là: <b>Hoạt động thực tiễn</b>."}, {"q": "Theo quan điểm khách quan, nhận thức\nvà hoạt động thực tiễn của chúng ta phải như thế nào?", "a": "Phải xuất phát từ thực tế khách quan,\ntôn trọng khách quan; đồng thời phải phát huy tính năng động chủ quan của con người", "e": "Đáp án chính xác là: <b>Phải xuất phát từ thực tế khách quan,\ntôn trọng khách quan; đồng thời phải phát huy tính năng động chủ quan của con người</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, điều kiện tiên quyết, cần thiết và chủ yếu quyết định sự hình thành và phát triển của con người cả về phương diện sinh học lẫn phương diện xã hội là gì?", "a": "Lao động", "e": "Đáp án chính xác là: <b>Lao động</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, đối tượng của cách mạng xã hội được hiểu như thế nào?", "a": "Đó là những giai cấp và những lực lượng đối lập cần phải đánh đổ của cách mạng.", "e": "Đáp án chính xác là: <b>Đó là những giai cấp và những lực lượng đối lập cần phải đánh đổ của cách mạng.</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, giai cấp lãnh đạo cách mạng xã hội là giai cấp nào?", "a": "Giai cấp, tầng lớp có hệ tư tưởng tiến bộ, đại diện cho phương thức sản xuất tiến bộ, cho xu hướng phát triển của xã hội.", "e": "Đáp án chính xác là: <b>Giai cấp, tầng lớp có hệ tư tưởng tiến bộ, đại diện cho phương thức sản xuất tiến bộ, cho xu hướng phát triển của xã hội.</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, giữa cá nhân và xã hội có quan hệ với nhau như thế nào? CHỌN PHƯƠNG ÁN SAI", "a": "Cá nhân và xã hội thống nhất với nhau một cách tuyệt đối", "e": "Đáp án chính xác là: <b>Cá nhân và xã hội thống nhất với nhau một cách tuyệt đối</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, hiện tượng tha hóa của con người diễn ra trong xã hội nào?", "a": "Trong xã hội có phân chai giai cấp", "e": "Đáp án chính xác là: <b>Trong xã hội có phân chai giai cấp</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, hoạt động xã hội quan trọng nhất của con người là hoạt động nào?", "a": "Lao động sản xuất", "e": "Đáp án chính xác là: <b>Lao động sản xuất</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, khi giai cấp vô sản chưa có chính quyền, việc tuyên truyền cổ động; đấu tranh trên lĩnh vực báo chí; đấu tranh trên lĩnh vực văn hoá nghệ thuật, ... là những biểu hiện của hình thức đấu tranh nào?", "a": "Đấu tranh chính trị", "e": "Đáp án chính xác là: <b>Đấu tranh chính trị</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, lãnh tụ giữ vai trò gì trong lịch sử?", "a": "Thúc đẩy hoặc kìm hãm sự phát triển xã hội", "e": "Đáp án chính xác là: <b>Thúc đẩy hoặc kìm hãm sự phát triển xã hội</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, lãnh tụ xuất hiện từ đâu?", "a": "Từ trong phong trào đấu tranh của quần chúng nhân dân", "e": "Đáp án chính xác là: <b>Từ trong phong trào đấu tranh của quần chúng nhân dân</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, lực lượng căn bản, chủ chốt trong quần chúng nhân dân là ai?", "a": "Những người lao động sản xuất ra của cải vật chất và tinh thần cho xã hội", "e": "Đáp án chính xác là: <b>Những người lao động sản xuất ra của cải vật chất và tinh thần cho xã hội</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, lực lượng cơ bản của xã hội, sản xuất ra toàn bộ của cải vật chất, là tiền đề và cơ sở cho sự tồn tại, vận động và phát triển của mọi xã hội trong mọi thời kỳ lịch sử là ai?", "a": "Quần chúng nhân dân", "e": "Đáp án chính xác là: <b>Quần chúng nhân dân</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, lực lượng nào là người sáng tạo, người gạn lọc, lưu giữ, truyền bá và phổ biến các giá trị tinh thần, làm cho nó được chọn lọc, được bảo tồn vĩnh viễn?", "a": "Quần chúng nhân dân", "e": "Đáp án chính xác là: <b>Quần chúng nhân dân</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, mối quan hệ biện chứng giữa tồn tại xã hội và ý thức xã hội biểu hiện như thế nào?", "a": "Tồn tại xã hội quyết định ý thức xã hội đồng thời ý thức xã hội tác động trở lại tồn tại xã hội.", "e": "Đáp án chính xác là: <b>Tồn tại xã hội quyết định ý thức xã hội đồng thời ý thức xã hội tác động trở lại tồn tại xã hội.</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, mối quan hệ giữa quần chúng nhân dân và lãnh tụ thể hiện như thế nào?", "a": "Quần chúng nhân dân là lực lượng đóng vai trò quyết định đối với sự phát triển của lịch sử xã hội; Lãnh tụ là người dẫn dắt, định hướng cho phong trào, thúc đẩy phong trào phát triển.", "e": "Đáp án chính xác là: <b>Quần chúng nhân dân là lực lượng đóng vai trò quyết định đối với sự phát triển của lịch sử xã hội; Lãnh tụ là người dẫn dắt, định hướng cho phong trào, thúc đẩy phong trào phát triển.</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, nguồn gốc sâu xa của cách mạng xã hội là gì?", "a": "Do mâu thuẫn gay gắt giữa lực lượng sản xuất với quan hệ sản xuất.", "e": "Đáp án chính xác là: <b>Do mâu thuẫn gay gắt giữa lực lượng sản xuất với quan hệ sản xuất.</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, nguồn gốc của sự vận động, phát triển là do đâu?", "a": "Mâu thuẫn tồn tại khách quan trong chính sự vật quy định sự vận động, phát triển của sự vật.", "e": "Đáp án chính xác là: <b>Mâu thuẫn tồn tại khách quan trong chính sự vật quy định sự vận động, phát triển của sự vật.</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, nguyên nhân gây nên hiện tượng tha hóa con người là gì?", "a": "Chế độ tư hữu về tư liệu sản xuất", "e": "Đáp án chính xác là: <b>Chế độ tư hữu về tư liệu sản xuất</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, tha hoá con người được đẩy lên cao nhất trong xã hội nào?", "a": "Xã hội tư bản", "e": "Đáp án chính xác là: <b>Xã hội tư bản</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, thực chất của hiện tượng tha hóa con người là gì?", "a": "Là lao động của con người bị tha hóa", "e": "Đáp án chính xác là: <b>Là lao động của con người bị tha hóa</b>."}, {"q": "Theo quan điểm triết học Mác – Lênin, yếu tố nào là cầu nối, liên kết, là mắt xích quyết định, là động lực để quần chúng nhân dân và lãnh tụ thống nhất về ý chí và hành động?", "a": "Lợi ích", "e": "Đáp án chính xác là: <b>Lợi ích</b>."}, {"q": "Theo V.I.Lênin, quan hệ nào là quan hệ cơ bản và chủ yếu quyết định trực tiếp đến địa vị kinh tế - xã hội của các giai cấp?", "a": "Quan hệ sở hữu đối với tư liệu sản xuất", "e": "Đáp án chính xác là: <b>Quan hệ sở hữu đối với tư liệu sản xuất</b>."}, {"q": "Thực tiễn là gì?", "a": "Là hoạt động vật chất có mục đích mang tính lịch sử - xã hội của con người nhằm cải tạo tự nhiên và xã hội.", "e": "Đáp án chính xác là: <b>Là hoạt động vật chất có mục đích mang tính lịch sử - xã hội của con người nhằm cải tạo tự nhiên và xã hội.</b>."}, {"q": "Thuộc tính cơ bản nhất để phân biệt vật chất và ý thức là gì?", "a": "Tồn tại khách quan", "e": "Đáp án chính xác là: <b>Tồn tại khách quan</b>."}, {"q": "Tiền đề lý luận hình thành triết học Mác là gì?", "a": "Thế giới quan duy tâm biện chứng của Heghen và chủ nghĩa duy vật siêu hình của L.Phoiơbắc", "e": "Đáp án chính xác là: <b>Thế giới quan duy tâm biện chứng của Heghen và chủ nghĩa duy vật siêu hình của L.Phoiơbắc</b>."}, {"q": "Tính chất của mối liên hệ phổ biến là gì?", "a": "Tính khách quan, tính phổ biến, tính đa dạng phong phú", "e": "Đáp án chính xác là: <b>Tính khách quan, tính phổ biến, tính đa dạng phong phú</b>."}, {"q": "Tính giai cấp của triết học thể hiện ở đâu?", "a": "Thể hiện trong mọi trường phái triết học", "e": "Đáp án chính xác là: <b>Thể hiện trong mọi trường phái triết học</b>."}, {"q": "Toàn bộ tư tưởng, tình cảm, tâm trạng, thói quen, nếp sống, nếp nghĩ, phong tục, tập quán, ước muốn,... của một người, một bộ phận xã hội hay của toàn thể xã hội hình thành dưới tác động trực tiếp của cuộc sống hằng ngày của họ và phản ánh cuộc sống đó được gọi là gì?", "a": "Tâm lý xã hội", "e": "Đáp án chính xác là: <b>Tâm lý xã hội</b>."}, {"q": "Tồn tại xã hội là gì?", "a": "Là sự tồn tại các hệ thống chính trị, kinh tế với nhau trong xã hội", "e": "Đáp án chính xác là: <b>Là sự tồn tại các hệ thống chính trị, kinh tế với nhau trong xã hội</b>."}, {"q": "Tri thức kết hợp với tình cảm hình thành nên yếu tố nào?", "a": "Niềm tin", "e": "Đáp án chính xác là: <b>Niềm tin</b>."}, {"q": "Triết học là gì?", "a": "Là hệ thống quan điểm lý luận chung nhất về thế giới và vị trí con người trong thế giới đó, là khoa học về những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy.", "e": "Đáp án chính xác là: <b>Là hệ thống quan điểm lý luận chung nhất về thế giới và vị trí con người trong thế giới đó, là khoa học về những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội và tư duy.</b>."}, {"q": "Triết học Mác-Lênin là gì?", "a": "Triết học Mác - Lênin là hệ thống quan điểm duy vật biện chứng về tự nhiên, xã hội và tư duy - thế giới quan và phương pháp luận khoa học, cách mạng của giai cấp công nhân và nhân dân lao động trong nhận thức và cải tạo thế giới", "e": "Đáp án chính xác là: <b>Triết học Mác - Lênin là hệ thống quan điểm duy vật biện chứng về tự nhiên, xã hội và tư duy - thế giới quan và phương pháp luận khoa học, cách mạng của giai cấp công nhân và nhân dân lao động trong nhận thức và cải tạo thế giới</b>."}, {"q": "Triết học ra đời khi nào, ở đâu?", "a": "Vào khoảng thế kỷ VIII đến thế kỷ VI trước Công nguyên tại một số trung tâm văn minh Cổ đại của nhân loại như Trung Quốc, Ấn Độ, Hy Lạp.", "e": "Đáp án chính xác là: <b>Vào khoảng thế kỷ VIII đến thế kỷ VI trước Công nguyên tại một số trung tâm văn minh Cổ đại của nhân loại như Trung Quốc, Ấn Độ, Hy Lạp.</b>."}, {"q": "Trong các hình thức của hoạt động thực tiễn, hoạt động nào giữ vai trò quyết định?", "a": "Hoạt động sản xuất vật chất", "e": "Đáp án chính xác là: <b>Hoạt động sản xuất vật chất</b>."}, {"q": "Trong đấu tranh giai cấp, cơ sở quan trọng nhất của liên minh giai cấp là gì?", "a": "Sự thống nhất về lợi ích cơ bản", "e": "Đáp án chính xác là: <b>Sự thống nhất về lợi ích cơ bản</b>."}, {"q": "Trong đời sống xã hội, quy luật lượng – chất được thực hiện với điều kiện gì?", "a": "Cần hoạt động có ý thức của con người", "e": "Đáp án chính xác là: <b>Cần hoạt động có ý thức của con người</b>."}, {"q": "Trong kết cấu của ý thức thì yếu tố nào là quan trọng nhất?", "a": "Tri thức", "e": "Đáp án chính xác là: <b>Tri thức</b>."}, {"q": "Trong kết cấu của ý thức, yếu tố nào thể hiện mặt năng động của ý thức?", "a": "Ý chí", "e": "Đáp án chính xác là: <b>Ý chí</b>."}, {"q": "Trong kiểu nhà nước chủ nô quý tộc, nhà nước là công cụ thống trị của giai cấp nào?", "a": "Giai cấp chủ nô", "e": "Đáp án chính xác là: <b>Giai cấp chủ nô</b>."}, {"q": "Trong kiểu nhà nước phong kiến, nhà nước là công cụ thống trị của giai cấp nào?", "a": "Giai cấp địa chủ, quý tộc", "e": "Đáp án chính xác là: <b>Giai cấp địa chủ, quý tộc</b>."}, {"q": "Trong kiểu nhà nước tư sản, nhà nước là công cụ thống trị của giai cấp nào?", "a": "Giai cấp tư sản", "e": "Đáp án chính xác là: <b>Giai cấp tư sản</b>."}, {"q": "Trong lịch sử đã từng tồn tại các kiểu nhà nước nào?", "a": "Cả 3 phương án kia đều đúng", "e": "Đáp án chính xác là: <b>Cả 3 phương án kia đều đúng</b>."}, {"q": "Trong lực lượng sản xuất, yếu tố nào giữ vai trò quyết định?", "a": "Người lao động", "e": "Đáp án chính xác là: <b>Người lao động</b>."}, {"q": "Trong lực lượng sản xuất, yếu tố nào là thước đo trình độ tác động, cải biến tự nhiên của con người?", "a": "Công cụ lao động", "e": "Đáp án chính xác là: <b>Công cụ lao động</b>."}, {"q": "Trong lực lượng sản xuất, yếu tố nào là yếu tố “động nhất, cách mạng nhất”?", "a": "Công cụ lao động", "e": "Đáp án chính xác là: <b>Công cụ lao động</b>."}, {"q": "Trong quan hệ sản xuất, quan hệ nào giữ vai trò quyết định các phương diện khác?", "a": "Quan hệ sở hữu đối với tư liệu sản xuất", "e": "Đáp án chính xác là: <b>Quan hệ sở hữu đối với tư liệu sản xuất</b>."}, {"q": "Trong quan hệ sản xuất, quan hệ nào quy định địa vị kinh tế- xã hội của các tập đoàn người trong sản xuất?", "a": "Quan hệ sở hữu đối với tư liệu sản xuất", "e": "Đáp án chính xác là: <b>Quan hệ sở hữu đối với tư liệu sản xuất</b>."}, {"q": "Trong quan hệ sản xuất, quan hệ nào quyết định trực tiếp đến quy mô, tốc độ, hiệu quả của nền sản xuất; có khả năng đẩy nhanh hoặc kìm hãm sự phát triển của nền sản xuất xã hội?", "a": "Quan hệ sở hữu đối với tư liệu sản xuất", "e": "Đáp án chính xác là: <b>Quan hệ sở hữu đối với tư liệu sản xuất</b>."}, {"q": "Trong sản xuất xã hội loại hình sản xuất nào là cơ bản nhất?", "a": "Sản xuất vật chất", "e": "Đáp án chính xác là: <b>Sản xuất vật chất</b>."}, {"q": "Trong tồn tại xã hội yếu tố nào là yếu tố quyết định?", "a": "Phương thức sản xuất", "e": "Đáp án chính xác là: <b>Phương thức sản xuất</b>."}, {"q": "Trong tư liệu sản xuất, yếu tố nào giữ vai trò quyết định đến năng suất lao động?", "a": "Phương tiện lao động", "e": "Đáp án chính xác là: <b>Phương tiện lao động</b>."}, {"q": "Trong xã hội có giai cấp, đấu tranh giai cấp chủ yếu và trước hết là cuộc đấu tranh giữa các lực lượng nào?", "a": "Hai giai cấp cơ bản đại diện cho phương thức sản xuất thống trị", "e": "Đáp án chính xác là: <b>Hai giai cấp cơ bản đại diện cho phương thức sản xuất thống trị</b>."}, {"q": "Trường phái triết học nào cho thực tiễn là cơ sở chủ yếu và trực tiếp nhất của nhận thức?", "a": "Chủ nghĩa suy vật biện chứng", "e": "Đáp án chính xác là: <b>Chủ nghĩa suy vật biện chứng</b>."}, {"q": "Trường phái triết học nào giải thích mọi hiện tượng của tự nhiên bằng sự tác động qua lại giữa \"lực hút\" và \"lực đẩy\"?", "a": "Chủ nghĩa duy vật siêu hình thế kỷ XVII-XVIII", "e": "Đáp án chính xác là: <b>Chủ nghĩa duy vật siêu hình thế kỷ XVII-XVIII</b>."}, {"q": "Từ định nghĩa vật chất của V.I.Lênin chúng ta rút ra được ý nghĩa phương pháp luận gì?", "a": "Cả 3 phán đoán kia đều đúng", "e": "Đáp án chính xác là: <b>Cả 3 phán đoán kia đều đúng</b>."}, {"q": "Tư liệu sản xuất bao gồm những yếu tố nào?", "a": "Đối tượng lao động và tư liệu lao động", "e": "Đáp án chính xác là: <b>Đối tượng lao động và tư liệu lao động</b>."}, {"q": "Từ mối quan hệ biện chứng giữa vật chất và ý thức trên lập trường duy vật biện chứng, chúng ta rút ra nguyên tắc triết học gì?", "a": "Quan điểm khách quan", "e": "Đáp án chính xác là: <b>Quan điểm khách quan</b>."}, {"q": "Từ nguyên lý về mối liên hệ phổ biến của phép biện chứng duy vật chúng ta rút ra những nguyên tắc phương pháp luận nào cho hoạt động lý luận và thực tiễn?", "a": "Quan điểm toàn diện, lịch sử - cụ thể", "e": "Đáp án chính xác là: <b>Quan điểm toàn diện, lịch sử - cụ thể</b>."}, {"q": "Vai trò của quy luật phủ định của phủ định trong phép biện chứng duy vật?", "a": "Chỉ ra khuynh hướng vận động và phát triển của sự vật.", "e": "Đáp án chính xác là: <b>Chỉ ra khuynh hướng vận động và phát triển của sự vật.</b>."}, {"q": "Vấn đề cơ bản của triết học là gì?", "a": "Vấn đề mối quan hệ giữa vật chất và ý thức", "e": "Đáp án chính xác là: <b>Vấn đề mối quan hệ giữa vật chất và ý thức</b>."}, {"q": "Vị trí của quy luật lượng – chất trong phép biện chứng duy vật là gì?", "a": "Chỉ ra cách thức chung của các quá trình vận động và phát triển", "e": "Đáp án chính xác là: <b>Chỉ ra cách thức chung của các quá trình vận động và phát triển</b>."}, {"q": "Việc không dám thực hiện những bước nhảy cần thiết khi tích luỹ về lượng đã đạt đến giới hạn Độ là biểu hiện của xu hướng nào?", "a": "Hữu khuynh", "e": "Đáp án chính xác là: <b>Hữu khuynh</b>."}, {"q": "Việc không tôn trọng quá trình tích luỹ về lượng ở mức độ cần thiết cho sự biến đổi về chất là biểu hiện của xu hướng nào?", "a": "Tả khuynh", "e": "Đáp án chính xác là: <b>Tả khuynh</b>."}, {"q": "Ý thức có tồn tại không? Tồn tại ở đâu?", "a": "Có tồn tại, tồn tại chủ quan", "e": "Đáp án chính xác là: <b>Có tồn tại, tồn tại chủ quan</b>."}, {"q": "Yêu cầu của quan điểm toàn diện là gì?", "a": "Cần phải xem xét tất cả các mối liên hệ của sự vật, đồng thời phải xác định vị trí, vai trò của các mối liên hệ", "e": "Đáp án chính xác là: <b>Cần phải xem xét tất cả các mối liên hệ của sự vật, đồng thời phải xác định vị trí, vai trò của các mối liên hệ</b>."}, {"q": "Yếu tố nào được coi là nguồn lực cơ bản, vô tận và đặc biệt của sản xuất vật chất?", "a": "Tư liệu sản xuất", "e": "Đáp án chính xác là: <b>Tư liệu sản xuất</b>."}, {"q": "Yếu tố nào trong kết cấu của ý thức thể hiện sức mạnh bản thân mỗi con người nhằm thực hiện mục đích của mình?", "a": "Ý chí", "e": "Đáp án chính xác là: <b>Ý chí</b>."}];
+
+    // GLOBAL VARIABLES
+    let quizData = [];
+    let currentQIndex = 0;
+    let score = 0;
+    let isReviewMode = false;
+
+    // --- LOGIC FUNCTIONS ---
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function getWrongOptions(correctAnswer, allAnswers) {
+        let wrongs = [];
+        let attempts = 0;
+        while (wrongs.length < 3 && attempts < 150) {
+            const rand = allAnswers[Math.floor(Math.random() * allAnswers.length)];
+            if (rand !== correctAnswer && !wrongs.includes(rand)) {
+                wrongs.push(rand);
+            }
+            attempts++;
+        }
+        return wrongs;
+    }
+
+    function initQuiz(selectedData) {
+        const shuffledRaw = shuffleArray([...selectedData]);
+        const allAnswers = fullData.map(item => item.a);
+
+        quizData = shuffledRaw.map((item, index) => {
+            const correct = item.a;
+            const wrongs = getWrongOptions(correct, allAnswers);
+            const options = shuffleArray([correct, ...wrongs]);
+            return {
+                id: index, q: item.q, a: item.a, e: item.e,
+                options: options, userSelected: null, isCorrect: null
+            };
+        });
+
+        currentQIndex = 0;
+        score = 0;
+        updateStats();
+        renderSidebar();
+        loadQuestion(0);
+        document.getElementById('result-overlay').classList.remove('active');
+        document.getElementById('sidebar').classList.remove('open');
+    }
+
+    // --- LANDING PAGE LOGIC ---
+    function showSelection() {
+        document.getElementById('intro-view').classList.add('fade-out');
+        setTimeout(() => {
+            const selView = document.getElementById('selection-view');
+            selView.style.display = 'grid'; 
+            setTimeout(() => {
+                selView.classList.add('active');
+            }, 50);
+        }, 500);
+    }
+
+    function startQuizMode(mode) {
+        isReviewMode = false;
+        let dataToUse = [];
+        if (mode === 'chapter1') {
+            dataToUse = chap1Data;
+        } else {
+            dataToUse = fullData;
+        }
+
+        document.getElementById('landing-page').classList.add('hidden');
+        initQuiz(dataToUse);
+    }
+
+    // --- REVIEW WRONG ANSWERS LOGIC ---
+    function reviewWrongAnswers() {
+        const wrongQuestions = quizData.filter(q => q.userSelected !== null && !q.isCorrect);
+        if (wrongQuestions.length === 0) return;
+
+        // Tạo bộ dữ liệu thô từ các câu sai
+        const rawWrongData = wrongQuestions.map(item => ({
+            q: item.q,
+            a: item.a,
+            e: item.e
+        }));
+
+        isReviewMode = true;
+        initQuiz(rawWrongData);
+    }
+
+    // --- UI FUNCTIONS ---
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+    
+    function renderSidebar() {
+        const mapContainer = document.getElementById('question-map');
+        mapContainer.innerHTML = '';
+        quizData.forEach((q, index) => {
+            const item = document.createElement('div');
+            item.className = 'map-item';
+            item.textContent = index + 1;
+            item.id = `map-item-${index}`;
+            item.onclick = () => jumpToQuestion(index);
+            mapContainer.appendChild(item);
+        });
+    }
+
+    function updateSidebarStatus(index) {
+        const item = document.getElementById(`map-item-${index}`);
+        const data = quizData[index];
+        item.classList.remove('active', 'correct', 'wrong');
+        if (index === currentQIndex) item.classList.add('active');
+        if (data.userSelected) item.classList.add(data.isCorrect ? 'correct' : 'wrong');
+    }
+
+    function updateStats() {
+        document.getElementById('progress-text').textContent = `Tiến độ: ${currentQIndex + 1}/${quizData.length}`;
+        document.getElementById('score-text').textContent = `Đúng: ${score}`;
+        const percent = ((currentQIndex + 1) / quizData.length) * 100;
+        document.getElementById('progress-bar').style.width = `${percent}%`;
+    }
+
+    function jumpToQuestion(index) {
+        const oldItem = document.getElementById(`map-item-${currentQIndex}`);
+        if(oldItem) oldItem.classList.remove('active');
+        currentQIndex = index;
+        loadQuestion(index);
+        if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+    }
+
+    function loadQuestion(index) {
+        const data = quizData[index];
+        document.getElementById('q-number').textContent = isReviewMode ? `ÔN TẬP CÂU SAI ${index + 1}` : `CÂU HỎI ${index + 1}`;
+        document.getElementById('q-text').textContent = data.q;
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+
+        data.options.forEach(opt => {
+            const div = document.createElement('div');
+            div.className = 'option-item';
+            div.textContent = opt;
+            if (data.userSelected) {
+                div.classList.add('disabled');
+                if (opt === data.a) div.classList.add('correct');
+                else if (opt === data.userSelected) div.classList.add('wrong');
+            } else {
+                div.onclick = () => handleAnswer(opt);
+            }
+            container.appendChild(div);
+        });
+
+        const expBox = document.getElementById('explanation-box');
+        expBox.style.display = 'none';
+        document.getElementById('explanation-content').innerHTML = "";
+
+        if (data.userSelected) {
+            expBox.style.display = 'block';
+            document.getElementById('explanation-content').innerHTML = data.e;
+        }
+
+        updateSidebarStatus(index);
+        updateStats();
+
+        document.getElementById('btn-prev').disabled = (index === 0);
+        const nextBtn = document.getElementById('btn-next');
+        nextBtn.textContent = (index === quizData.length - 1) ? 'Hoàn thành 🏁' : 'Câu sau →';
+        document.querySelector('.main-content').scrollTop = 0;
+    }
+
+    function handleAnswer(selectedOpt) {
+        const data = quizData[currentQIndex];
+        if (data.userSelected) return;
+        
+        data.userSelected = selectedOpt;
+        data.isCorrect = (selectedOpt === data.a);
+        if (data.isCorrect) score++;
+
+        const container = document.getElementById('options-container');
+        Array.from(container.children).forEach(div => {
+            div.classList.add('disabled');
+            div.onclick = null;
+            if(div.textContent === data.a) div.classList.add('correct');
+            else if(div.textContent === data.userSelected) div.classList.add('wrong');
+        });
+
+        const expBox = document.getElementById('explanation-box');
+        expBox.style.display = 'block';
+        document.getElementById('explanation-content').innerHTML = data.e;
+
+        updateSidebarStatus(currentQIndex);
+        updateStats();
+    }
+
+    function prevQuestion() { if (currentQIndex > 0) jumpToQuestion(currentQIndex - 1); }
+    function nextQuestion() {
+        if (currentQIndex < quizData.length - 1) jumpToQuestion(currentQIndex + 1);
+        else showResult();
+    }
+
+    function showResult() {
+        document.getElementById('final-score').textContent = `${score}/${quizData.length}`;
+        const ratio = score / quizData.length;
+        let msg = "";
+        
+        const wrongCount = quizData.length - score;
+        const btnReview = document.getElementById('btn-review-wrong');
+        
+        if (wrongCount > 0) {
+            btnReview.style.display = 'inline-flex';
+        } else {
+            btnReview.style.display = 'none';
+        }
+
+        if (ratio > 0.9) msg = "Xuất sắc! Bạn là thiên tài Triết học! 🌟";
+        else if (ratio > 0.7) msg = "Làm tốt lắm! Kiến thức rất vững. 🔥";
+        else if (ratio > 0.5) msg = "Tạm ổn. Cố gắng ôn thêm nhé. 💪";
+        else msg = "Cần cố gắng nhiều hơn. Đừng nản chí! 📚";
+        document.getElementById('final-msg').textContent = msg;
+        document.getElementById('result-overlay').classList.add('active');
+    }
+
+    function closeResult() { document.getElementById('result-overlay').classList.remove('active'); }
+    
+    function restartQuiz() { 
+        isReviewMode = false;
+        // Reset về chế độ ban đầu (dựa trên số lượng câu hỏi để đoán mode cũ)
+        // Cách tốt hơn là lưu mode vào biến global, nhưng ở đây dùng logic đơn giản
+        const currentData = (quizData.length <= chap1Data.length && !isReviewMode) ? chap1Data : fullData;
+        initQuiz(currentData); 
+    }
+
+    function returnToMenu() {
+        location.reload();
+    }
+
+    // --- THEME ---
+    const themeToggle = document.getElementById('theme-toggle');
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.checked = true;
+    }
+    themeToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+</script>
+</body>
+</html>
