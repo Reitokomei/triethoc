@@ -533,19 +533,25 @@
     }
 
     // --- UI FUNCTIONS ---
-    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
-    
-    function renderSidebar() {
-        const mapContainer = document.getElementById('question-map');
-        mapContainer.innerHTML = '';
-        quizData.forEach((q, index) => {
-            const item = document.createElement('div');
-            item.className = 'map-item';
-            item.textContent = index + 1;
-            item.id = `map-item-${index}`;
-            item.onclick = () => jumpToQuestion(index);
-            mapContainer.appendChild(item);
-        });
+    function toggleSidebar() {
+        // Bật/tắt class 'open' cho sidebar
+        document.getElementById('sidebar').classList.toggle('open');
+        
+        // Bật/tắt class 'active' cho màn đen
+        const overlay = document.getElementById('mobile-overlay');
+        if (overlay) {
+            overlay.classList.toggle('active');
+        }
+    }
+
+    // Thêm cái này: Khi chọn câu hỏi trong sidebar xong thì tự đóng sidebar lại (cho đỡ vướng)
+    function jumpToQuestion(index) {
+        // ... (code cũ giữ nguyên) ...
+        
+        // Thêm đoạn này vào cuối hàm jumpToQuestion:
+        if(window.innerWidth <= 768) {
+            toggleSidebar(); // Tự động đóng menu trên mobile
+        }
     }
 
     function updateSidebarStatus(index) {
@@ -695,4 +701,5 @@
 </script>
 </body>
 </html>
+
 
