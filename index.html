@@ -243,6 +243,38 @@
             .question-map { grid-template-columns: repeat(4, 1fr); }
         }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* --- CSS MỚI CHO GIAO DIỆN 2 CỘT --- */
+        .subject-group {
+            background: rgba(255, 255, 255, 0.05); /* Nền mờ nhẹ */
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 320px; /* Độ rộng tối thiểu mỗi cột */
+            backdrop-filter: blur(5px);
+        }
+        .subject-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #fbbf24; /* Màu vàng nổi bật */
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        
+        /* Sửa lại cái lưới cũ thành dạng Flex để 2 cột nằm cạnh nhau */
+        #selection-view.active {
+            display: flex !important; 
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+        }
     </style>
 </head>
 <body>
@@ -631,4 +663,5 @@
 </body>
 
 </html>
+
 
