@@ -1,15 +1,14 @@
- 2<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LYYG9C8HL5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LYYG9C8HL5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-LYYG9C8HL5');
-</script>
+      gtag('config', 'G-LYYG9C8HL5');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luyện thi Triết học - Ôn tập hiệu quả</title>
@@ -523,7 +522,7 @@
             
             <div style="display:flex; flex-direction:column; gap:12px; align-items:center">
                 <button class="btn btn-warning" id="btn-review-wrong" onclick="reviewWrongAnswers()" style="display:none; width: 100%; justify-content: center;">
-                       🔍 Ôn lại các câu sai
+                        🔍 Ôn lại các câu sai
                 </button>
 
                 <div style="display:flex; gap:15px; width: 100%; justify-content: center;">
@@ -696,6 +695,7 @@
     let currentQIndex = 0;
     let score = 0;
     let isReviewMode = false;
+    let currentMode = 'chapter1'; // Default mode to fix restart bug
 
     // --- LOGIC FUNCTIONS ---
     function shuffleArray(array) {
@@ -719,7 +719,7 @@
         return wrongs;
     }
 
-    // --- RENDER SIDEBAR (BỊ THIẾU TRONG CODE CŨ CỦA ÔNG) ---
+    // --- RENDER SIDEBAR ---
     function renderSidebar() {
         const mapContainer = document.getElementById('question-map');
         mapContainer.innerHTML = '';
@@ -751,9 +751,7 @@
         currentQIndex = 0;
         score = 0;
         
-        // Gọi hàm render Sidebar mới thêm
         renderSidebar();
-        
         updateStats();
         loadQuestion(0);
         document.getElementById('result-overlay').classList.remove('active');
@@ -774,6 +772,8 @@
 
     function startQuizMode(mode) {
         isReviewMode = false;
+        currentMode = mode; // Store the mode
+        
         let dataToUse = [];
         if (mode === 'chapter1') {
             dataToUse = chap1Data;
@@ -939,8 +939,9 @@
     
     function restartQuiz() { 
         isReviewMode = false;
-        const currentData = (quizData.length <= chap1Data.length && !isReviewMode) ? chap1Data : fullData;
-        initQuiz(currentData); 
+        // Logic fixed: Uses currentMode to determine dataset
+        const dataToLoad = (currentMode === 'chapter1') ? chap1Data : fullData;
+        initQuiz(dataToLoad); 
     }
 
     function returnToMenu() {
@@ -966,4 +967,3 @@
 </script>
 </body>
 </html>
-
